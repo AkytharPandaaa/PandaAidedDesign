@@ -13,9 +13,9 @@ $fn = $preview ? 25 : 125;
 FRAME_WIDTH_SQUARE = 45;
 ESD_FOAM_THICKNESS = 2.9;
 
-CPU_INTEL_3000_PCB = [37.5, 37.5, 1.09];
-CPU_INTEL_3000_HS_BASE = [34.2, 31.9, 1.4];
-CPU_INTEL_3000_HS_TOP = [29.6, 29.2, 1.8];
+CPU_INTEL_3000_PCB = [37.6, 37.6, 1.1];
+CPU_INTEL_3000_HS_BASE = [34.3, 32.2, 1.5];
+CPU_INTEL_3000_HS_TOP = [29.6, 29.2, 1.9];
 
 module cpu_dummy(pcb_size, hs_size_base, hs_size_top, tolerance = .15) {
   union() {
