@@ -10,8 +10,10 @@ $fn = $preview ? 25 : 125;
 
 // HS = heat spreader
 
+DEBUG_MODE = false;
+
 FRAME_WIDTH_SQUARE = 45;
-ESD_FOAM_THICKNESS = 2.9;
+ESD_FOAM_THICKNESS = 1.5;
 
 CPU_INTEL_3000_PCB = [37.6, 37.6, 1.1];
 CPU_INTEL_3000_HS_BASE = [34.3, 32.2, 1.5];
@@ -101,6 +103,9 @@ hs_top = CPU_INTEL_3000_HS_TOP;
 difference() {
   frame(pcb_size=pcb, cpu_thickness=pcb[2] + hs_base[2] + hs_top[2], esd_foam_thickness=ESD_FOAM_THICKNESS, tolerance=.15);
   translate(v=[0, 0, ESD_FOAM_THICKNESS]) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.15);
+
+  if (DEBUG_MODE)
+    translate(v=[0, 0, -5]) cube(30); // for development, to see the cross-section
 }
 
 // pcb cutting guide for the foam
