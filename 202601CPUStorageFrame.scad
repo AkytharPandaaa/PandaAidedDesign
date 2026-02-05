@@ -15,9 +15,9 @@ DEBUG_MODE = false;
 FRAME_WIDTH_SQUARE = 45;
 ESD_FOAM_THICKNESS = 1.5;
 
-CPU_INTEL_3000_PCB = [37.6, 37.6, 1.1];
-CPU_INTEL_3000_HS_BASE = [34.3, 32.2, 1.5];
-CPU_INTEL_3000_HS_TOP = [29.6, 29.2, 1.9];
+CPU_INTEL_3000_PCB = [37.8, 37.8, 1.2];
+CPU_INTEL_3000_HS_BASE = [34.5, 32.4, 1.5];
+CPU_INTEL_3000_HS_TOP = [29.7, 29.4, 1.9];
 
 module cpu_dummy(pcb_size, hs_size_base, hs_size_top, tolerance = .15) {
   union() {
@@ -38,7 +38,7 @@ module cpu_dummy(pcb_size, hs_size_base, hs_size_top, tolerance = .15) {
 
 module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
   module split_frame(thickness = .1) {
-    color(c="red", alpha=1.0) union() {
+    color(c="orange", alpha=1.0) union() {
         difference() {
           cube(size=[FRAME_WIDTH_SQUARE + 2, FRAME_WIDTH_SQUARE + 2, thickness], center=true);
           cube(size=[FRAME_WIDTH_SQUARE - 4, FRAME_WIDTH_SQUARE - 4, thickness + .2], center=true);
@@ -53,7 +53,7 @@ module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
   }
 
   module split_stack(thickness = .1) {
-    color(c="red", alpha=1.0) union() {
+    color(c="orange", alpha=1.0) union() {
         translate(v=[0, 0, -.5 / 2]) difference() {
             cube(size=[FRAME_WIDTH_SQUARE - 10, FRAME_WIDTH_SQUARE - 10, .5], center=true);
             cube(size=[FRAME_WIDTH_SQUARE - 10 - thickness * 2, FRAME_WIDTH_SQUARE - 10 - thickness * 2, .5 + .2], center=true);
@@ -68,7 +68,6 @@ module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
           }
       }
   }
-
 
   foam_height = esd_foam_thickness + (esd_foam_thickness == 0 ? 0 : tolerance);
   frame_top_thickness = 1.5;
@@ -105,10 +104,18 @@ hs_base = CPU_INTEL_3000_HS_BASE;
 hs_top = CPU_INTEL_3000_HS_TOP;
 difference() {
   frame(pcb_size=pcb, cpu_thickness=pcb[2] + hs_base[2] + hs_top[2], esd_foam_thickness=ESD_FOAM_THICKNESS, tolerance=.15);
-  translate(v=[0, 0, ESD_FOAM_THICKNESS]) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.15);
+
+  if (DEBUG_MODE) {
+    difference() {
+      translate(v=[0, 0, ESD_FOAM_THICKNESS]) color(c="aqua", alpha=1.0) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.15);
+      translate(v=[0, 0, ESD_FOAM_THICKNESS]) color(c="aqua", alpha=1.0) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.05);
+    }
+  } else {
+    translate(v=[0, 0, ESD_FOAM_THICKNESS]) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.15);
+  }
 
   if (DEBUG_MODE)
-    translate(v=[0, 0, -5]) cube(30); // for development, to see the cross-section
+    translate(v=[0, 0, -5]) cube(30);
 }
 
 // pcb cutting guide for the foam
