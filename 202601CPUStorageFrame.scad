@@ -69,15 +69,18 @@ module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
       }
   }
 
+
   foam_height = esd_foam_thickness + (esd_foam_thickness == 0 ? 0 : tolerance);
-  frame_height = cpu_thickness + foam_height + 3; // 3 = 1.5 (frame top) + 1.5 (frame bottom)
+  frame_top_thickness = 1.5;
+  frame_bottom_thickness = 1.5;
+  frame_height = cpu_thickness + foam_height + (frame_top_thickness + frame_bottom_thickness);
 
   difference() {
     // BASE
-    translate(v=[0, 0, frame_height / 2 - 1.5]) union() {
-        // 1.5 for the bottom floor
+    translate(v=[0, 0, frame_height / 2 - frame_bottom_thickness]) union() {
         cube([FRAME_WIDTH_SQUARE, FRAME_WIDTH_SQUARE, frame_height], center=true);
-        translate(v=[0, 0, -6.1]) cube([FRAME_WIDTH_SQUARE - 20, FRAME_WIDTH_SQUARE - 20, 2], center=true);
+        //FIX: translate z, needs manual correction if ESD_FOAM_THICKNESS changes
+        translate(v=[0, 0, -5.5]) cube([FRAME_WIDTH_SQUARE - 20, FRAME_WIDTH_SQUARE - 20, 2], center=true);
       }
 
     // CUTOUT VIEW
