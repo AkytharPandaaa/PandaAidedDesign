@@ -1,4 +1,4 @@
-// created by IndiePandaaaaa|Lukas
+// created by AkytharPandaaa
 // encoding: utf-8
 
 TOLERANCE = .12;
@@ -10,6 +10,8 @@ KEY_WIDTH = 25.3;
 KEY_THICKNESS = 2;
 KEY_RADIUS = 7.2;
 KEY_HOLE = [6.2, 5.2, 5.2]; // diameter, X Pos, Y Pos
+
+KEY_BIT_SIZE = [37, 11.3, 2.7];
 
 module case_side_popout() {
   module key_shape(size_added = 0) {
@@ -62,5 +64,33 @@ module case_side_popout() {
     }
   }
 }
+//KEY_LENGTH = 64.8;
+//KEY_WIDTH = 25.3;
+//KEY_THICKNESS = 2;
+//KEY_RADIUS = 7.2;
+//KEY_HOLE = [6.2, 5.2, 5.2]; // diameter, X Pos, Y Pos
 
-case_side_popout();
+module case_top_slide() {
+  // case to slide out the key to the top, like a pocket knive
+  module simplyfied_key_shape(thickness = 2) {
+    linear_extrude(height=thickness, center=true) {
+      translate(v=[0, 0, 0]) square([10, 20]);
+    }
+  }
+
+  simplyfied_key_shape(thickness=2);
+}
+
+module case_key_bit(key_bit_size, thickness = 2, tolerance = .1) {
+  difference() {
+    translate(v=[0, 0, 0]) minkowski() {
+        cube(size=[key_bit_size.x + tolerance - thickness, key_bit_size.y + tolerance, key_bit_size.z + tolerance], center=true);
+        sphere(r=thickness);
+      }
+    translate(v=[thickness / 2 + .1, 0, 0]) cube(size=[key_bit_size.x + tolerance + .1, key_bit_size.y + tolerance, key_bit_size.z + tolerance], center=true);
+  }
+}
+
+//case_side_popout();
+//case_top_slide();
+case_key_bit(key_bit_size=KEY_BIT_SIZE, thickness=1.5);
