@@ -15,39 +15,26 @@ DEBUG_MODE = false;
 FRAME_WIDTH_SQUARE = 45;
 ESD_FOAM_THICKNESS = 1.5;
 
-CPU_INTEL_3000_PCB = [37.8, 37.8, 1.2];
-CPU_INTEL_3000_HS_BASE = [34.5, 32.4, 1.5];
-CPU_INTEL_3000_HS_TOP = [29.7, 29.4, 1.9];
+CPU_INTEL_3000 = [37.8, 37.8, 4.5];
 
-module cpu_dummy(pcb_size, hs_size_base, hs_size_top, tolerance = .15) {
-  union() {
-    translate(v=[0, 0, pcb_size[2] / 2 + tolerance / 2]) {
-      // PCB
-      cube([pcb_size[0] + tolerance, pcb_size[1] + tolerance, pcb_size[2] + tolerance], center=true);
+cpu = CPU_INTEL_3000;
 
-      translate(v=[0, 0, pcb_size[2] - .1]) {
-        // HS_BASE
-        cube([pcb_size[0] + tolerance, hs_size_base[1] + tolerance, hs_size_base[2] + tolerance + .1], center=true);
-
-        translate(v=[0, 0, hs_size_base[2] - .1]) // HS_TOP
-          cube([pcb_size[0] + tolerance, hs_size_top[1] + tolerance, hs_size_top[2] + tolerance + .1], center=true);
-      }
-    }
-  }
+module cpu_dummy(cpu_size, tolerance = .15) {
+  translate(v=[0, 0, cpu_size.z / 2 + tolerance / 2]) cube(size=[cpu_size.x + tolerance, cpu_size.y + tolerance, cpu_size.z + tolerance], center=true);
 }
 
-module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
+module frame(cpu_size, esd_foam_thickness, tolerance = .15) {
   module split_frame(thickness = .1) {
     color(c="orange", alpha=1.0) union() {
         difference() {
           cube(size=[FRAME_WIDTH_SQUARE + 2, FRAME_WIDTH_SQUARE + 2, thickness], center=true);
           cube(size=[FRAME_WIDTH_SQUARE - 4, FRAME_WIDTH_SQUARE - 4, thickness + .2], center=true);
         }
-        translate(v=[0, 0, -thickness / 2 + (esd_foam_thickness + pcb_size[2] / 2) / 2]) difference() {
-            cube(size=[FRAME_WIDTH_SQUARE - 4 + thickness * 2, FRAME_WIDTH_SQUARE - 4 + thickness * 2, esd_foam_thickness + pcb_size[2] / 2], center=true);
-            cube(size=[FRAME_WIDTH_SQUARE - 4, FRAME_WIDTH_SQUARE - 4, (esd_foam_thickness + pcb_size[2] / 2) + .2], center=true);
+        translate(v=[0, 0, -thickness / 2 + (esd_foam_thickness + cpu_size[2] / 2) / 2]) difference() {
+            cube(size=[FRAME_WIDTH_SQUARE - 4 + thickness * 2, FRAME_WIDTH_SQUARE - 4 + thickness * 2, esd_foam_thickness + cpu_size[2] / 2], center=true);
+            cube(size=[FRAME_WIDTH_SQUARE - 4, FRAME_WIDTH_SQUARE - 4, (esd_foam_thickness + cpu_size[2] / 2) + .2], center=true);
           }
-        translate(v=[0, 0, esd_foam_thickness + pcb_size[2] / 2 - thickness])
+        translate(v=[0, 0, esd_foam_thickness + cpu_size[2] / 2 - thickness])
           cube(size=[FRAME_WIDTH_SQUARE - 4 + thickness * 2, FRAME_WIDTH_SQUARE - 4 + thickness * 2, thickness], center=true);
       }
   }
@@ -72,7 +59,7 @@ module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
   foam_height = esd_foam_thickness + (esd_foam_thickness == 0 ? 0 : tolerance);
   frame_top_thickness = 1.5;
   frame_bottom_thickness = 1.5;
-  frame_height = cpu_thickness + foam_height + (frame_top_thickness + frame_bottom_thickness);
+  frame_height = cpu_size[2] + foam_height + (frame_top_thickness + frame_bottom_thickness);
 
   difference() {
     // BASE
@@ -89,7 +76,7 @@ module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
     translate(v=[0, 0, -frame_height / 2]) cube(size=[FRAME_WIDTH_SQUARE - 22, FRAME_WIDTH_SQUARE - 22, frame_height + .2], center=true);
 
     // CUTOUT FOAM
-    translate(v=[0, 0, foam_height / 2]) cube(size=[pcb_size[0] + tolerance, pcb_size[1] + tolerance, foam_height], center=true);
+    translate(v=[0, 0, foam_height / 2]) cube(size=[cpu_size[0] + tolerance, cpu_size[1] + tolerance, foam_height], center=true);
 
     // CUT SPLIT POINT
     translate(v=[0, 0, 0]) split_frame(thickness=.1);
@@ -99,19 +86,16 @@ module frame(pcb_size, cpu_thickness, esd_foam_thickness, tolerance = .15) {
   }
 }
 
-pcb = CPU_INTEL_3000_PCB;
-hs_base = CPU_INTEL_3000_HS_BASE;
-hs_top = CPU_INTEL_3000_HS_TOP;
 difference() {
-  frame(pcb_size=pcb, cpu_thickness=pcb[2] + hs_base[2] + hs_top[2], esd_foam_thickness=ESD_FOAM_THICKNESS, tolerance=.15);
+  frame(cpu_size=cpu, esd_foam_thickness=ESD_FOAM_THICKNESS, tolerance=.15);
 
   if (DEBUG_MODE) {
     difference() {
-      translate(v=[0, 0, ESD_FOAM_THICKNESS]) color(c="aqua", alpha=1.0) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.15);
-      translate(v=[0, 0, ESD_FOAM_THICKNESS]) color(c="aqua", alpha=1.0) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.05);
+      translate(v=[0, 0, ESD_FOAM_THICKNESS]) color(c="aqua", alpha=1.0) cpu_dummy(cpu_size=cpu, tolerance=.15);
+      translate(v=[0, 0, ESD_FOAM_THICKNESS]) color(c="aqua", alpha=1.0) cpu_dummy(cpu_size=cpu, tolerance=.05);
     }
   } else {
-    translate(v=[0, 0, ESD_FOAM_THICKNESS]) cpu_dummy(pcb_size=pcb, hs_size_base=hs_base, hs_size_top=hs_top, tolerance=.15);
+    translate(v=[0, 0, ESD_FOAM_THICKNESS]) cpu_dummy(cpu_size=cpu, tolerance=.15);
   }
 
   if (DEBUG_MODE)
@@ -120,5 +104,5 @@ difference() {
 
 // pcb cutting guide for the foam
 if (ESD_FOAM_THICKNESS != 0) {
-  translate(v=[0, 50, 0]) cube(size=pcb, center=true);
+  translate(v=[0, 50, 0]) cube(size=[cpu.x, cpu.y, 2], center=true);
 }
