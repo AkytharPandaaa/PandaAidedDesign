@@ -9,7 +9,7 @@
 $fn = $preview ? 25 : 125;
 
 module grid(width, depth, a=2, grid_thickness=.7, solid=false) {
-  diameter = [0,14.3, 10.4];
+  diameter = [0,14.5, 10.5];
   height = 25;
   bat_diameter = diameter[a-1] + .1;
 
@@ -30,4 +30,5 @@ module grid(width, depth, a=2, grid_thickness=.7, solid=false) {
   }
 }
 
-grid(width = 4, depth = 3, a = 2);
+grid(width = 6, depth = 4, a = 2);
+translate(v = [100,0,0]) grid(width = 6, depth = 4, a = 3);
