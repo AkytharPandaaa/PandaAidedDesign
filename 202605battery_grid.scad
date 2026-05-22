@@ -8,22 +8,24 @@
 
 $fn = $preview ? 25 : 125;
 
-module grid(width, depth, a=2, grid_thickness=.7, solid=false) {
+module grid(width, depth, a=2, height = 20, grid_thickness=.7, floor_thickness = .5, border_thickness = 3) {
   diameter = [0,14.5, 10.5];
-  height = 25;
-  bat_diameter = diameter[a-1] + .1;
+  bat_od = diameter[a-1] + .1;
+  hex_od = bat_od / cos(30);
+  bat_offset = (bat_od) / 2;
 
-  difference() {
-    grid_sizing = bat_diameter + grid_thickness;
-    cube(size = [grid_sizing * width + grid_thickness, grid_sizing * depth + grid_thickness, height], center = false);
-
-    if (!solid) {
-      translate(v = [grid_thickness, grid_thickness, 0]) {
-        for (x=[0:width-1]) {
-          for (y=[0:depth-1]) {
-            translate(v = [(bat_diameter+grid_thickness)*x,(bat_diameter+grid_thickness)*y,-.1]) 
-              cube([bat_diameter, bat_diameter, height+.2]);
-          }
+  translate(v = [hex_od/2+grid_thickness, hex_od/2+grid_thickness, 0]) {
+    for (y=[0:depth-1]) {
+      for (x=[0:width-1]) {
+        translate(v = [
+          (bat_od) * x * 2 + ((bat_od - grid_thickness * 2) * (y%2)),
+          (bat_od/2)*y,
+          0
+        ]) {
+            translate(v = [0,0,height/2]) difference() {
+              cylinder(h = height+.2, r = hex_od/2+grid_thickness, center = true, $fn = 6);
+              cylinder(h = height+.4, r = hex_od/2, center = true, $fn = 6);
+            }
         }
       }
     }
@@ -31,4 +33,4 @@ module grid(width, depth, a=2, grid_thickness=.7, solid=false) {
 }
 
 grid(width = 6, depth = 4, a = 2);
-translate(v = [100,0,0]) grid(width = 6, depth = 4, a = 3);
+//translate(v = [100,0,0]) grid(width = 6, depth = 4, a = 3);
