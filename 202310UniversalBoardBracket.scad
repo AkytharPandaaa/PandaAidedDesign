@@ -93,7 +93,14 @@ module bottle_holder(diameter = 20) {
   }
 }
 
+module fan_holder(angle = 30, height = 50) {
+  union() {
+    vertical_mount(width = 25, height = height);
+  }
+}
+
 // translate([ 10, 0, 0 ]) top_mount();
 // translate([ 40, 0, 0 ]) vertical_mount(width=28.5, height=58.5);
 // bottle_holder(25);
-rodret_mount();
+// rodret_mount();
+fan_holder();
