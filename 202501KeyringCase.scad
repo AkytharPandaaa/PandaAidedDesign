@@ -62,5 +62,22 @@ module case_side_popout() {
     }
   }
 }
+//KEY_LENGTH = 64.8;
+//KEY_WIDTH = 25.3;
+//KEY_THICKNESS = 2;
+//KEY_RADIUS = 7.2;
+//KEY_HOLE = [6.2, 5.2, 5.2]; // diameter, X Pos, Y Pos
 
-case_side_popout();
+module case_top_slide() {
+  // case to slide out the key to the top, like a pocket knive
+  module simplyfied_key_shape(thickness = 2) {
+    linear_extrude(height=thickness, center=true) {
+      translate(v=[0, 0, 0]) square([10, 20]);
+    }
+  }
+
+  simplyfied_key_shape(thickness=2);
+}
+
+//case_side_popout();
+case_top_slide();
