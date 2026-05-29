@@ -18,8 +18,8 @@ module grid(width, depth, a=2, height = 20, grid_thickness=.7, floor_thickness =
     for (y=[0:depth-1]) {
       for (x=[0:width-1]) {
         translate(v = [
-          (bat_od) * x * 2 + ((bat_od - grid_thickness * 2) * (y%2)),
-          (bat_od/2)*y,
+          x * (hex_od + grid_thickness*2 + hex_od/2) + ((bat_od - grid_thickness * 2) * (y%2)),
+          (bat_od/2) * y + grid_thickness,
           0
         ]) {
             translate(v = [0,0,height/2]) difference() {
