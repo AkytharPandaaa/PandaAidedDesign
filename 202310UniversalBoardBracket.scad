@@ -93,9 +93,23 @@ module bottle_holder(diameter = 20) {
   }
 }
 
-module fan_holder(angle = 30, height = 50) {
+module fan_holder(board_height, fan_diameter=140, standoff_depth = 25) {
+  additional_height = 20;
   union() {
-    vertical_mount(width = 25, height = height);
+    vertical_mount(width = 25, height = additional_height + (board_height- fan_diameter)/2);
+
+    // standoff
+    difference() {
+      translate(v=[0,-standoff_depth,0]) cube([THICKNESS, standoff_depth, additional_height]);
+
+      // holes
+      for (i=[0:2]) {
+        hole_diameter = 3;
+        translate(v=[-.1,-standoff_depth + hole_diameter, 5 + 5*i]) 
+          rotate(a = 90, v=[0,1,0])
+            cylinder(h=THICKNESS+.2, d=hole_diameter, center=false);
+      }
+    }
   }
 }
 
@@ -103,4 +117,4 @@ module fan_holder(angle = 30, height = 50) {
 // translate([ 40, 0, 0 ]) vertical_mount(width=28.5, height=58.5);
 // bottle_holder(25);
 // rodret_mount();
-fan_holder();
+for (i=[0:1]) {mirror([i,0,0]) translate(v=[5*i,0,0]) fan_holder(board_height=155);}
