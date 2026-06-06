@@ -74,6 +74,7 @@ module __hex_pattern(width, depth, thickness, hex_inner_diameter = 10, border_th
   count_x = __hex_count_width(width, hex_inner_diameter, border_thickness);
   count_y = __hex_count_depth(depth, hex_inner_diameter, border_thickness);
 
+// TODO: 2D approach?
   for (y = [0:count_y - 1]) {
     for (x = [0:count_x - 1]) {
       translate([
