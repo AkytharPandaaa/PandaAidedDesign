@@ -138,11 +138,15 @@ module shower_backet() {
 
         for (j=[0:1]) {
           translate(v = [-THICKNESS,5 + (depth-10)*i,5 + (handle_od[2] - 10) *j]) 
-          rotate(a = 90, v = [0,-1,0]) 
-          screw(3, 20, true);
+            rotate(a = 90, v = [0,-1,0]) 
+              rotate(a = 90, v = [0,0,-1]) 
+              rotate(a = 180, v = [0,0,1*i]) 
+              screw_with_nut_metric(12, diameter=3, square_channel = true, tolerance = .1);
+              //screw(3, 20, true);
         }
       }
   }
+
 }
 
 // translate([ 10, 0, 0 ]) top_mount();
