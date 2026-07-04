@@ -58,34 +58,34 @@ module disk() {
   color("#777777") translate(v = [(146 - 130)/2, -150, 18]) cube(size = [130, 155, 18], center = false);
 }
 
+module io() {
+  color("#fa8800") cube(size = [160, 40, 20], center = false);
+}
+
 // ===================================================================================
 
 translate(v = [100, -50, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
 
 translate(v = [0, 0, 100]) union() {
-  color("#ddbb00") rotate(a = 90, v = [1,0,0])  cube(size = [600, 400, 18], center = false);  // mounting board
+  color("#ddbb00") rotate(a = 90, v = [1,0,0])  cube(size = [700, 400, 18], center = false);  // mounting board
 
-  translate(v = [35, 20, 50]) {  // radiators
-    translate(v = [140, 10, 320]) rotate([90, 90, 180]) radiator(fan_od = 140, fans = 2);
-    translate(v = [300, 10, 320]) rotate([90, 90, 180]) radiator(fan_od = 120, fans = 2);
-    translate(v = [480, 10, 320]) rotate([90, 90, 180]) radiator(fan_od = 140, fans = 2);
+  // radiators
+  translate(v = [340, 60, 400 + 1]) rotate([180, 0, 0]) mirror([1, 0, 0]) radiator(fan_od = 140, fans = 2);
+  translate(v = [360, 60, 400 + 1]) rotate([180, 0, 0]) radiator(fan_od = 140, fans = 2);
+  translate(v = [400, -20, 220]) rotate([90, 0, 0]) radiator(fan_od = 120, fans = 2);
+
+  translate(v = [165, -20, 20]) rotate(a = 90, v = [1,0,0])  mainboard(atx = true);
+
+  translate(v = [60, -100, 20]) pump_agb();
+
+  translate(v = [50, -20, 10]) rotate([90, -90, 0]) io();
+
+  translate(v = [20, 0, 260]) {
+    for (i=[0:1]) {translate(v = [0, -20, -80 * i]) rotate([90, 0, 0]) ssd();}
   }
 
-  translate(v = [210, -20, 20]) rotate(a = 90, v = [1,0,0])  mainboard(atx = false);
+  translate(v = [530, -20, 20]) rotate([90, 0, 0]) psu();
 
-  translate(v = [100, -100, 20]) pump_agb();
-
-  translate(v = [225, 0, 310]) {
-    for (i=[0:1]) {translate(v = [120 * i, -20, 0]) rotate(a = 90, v = [1, 0, 0]) ssd();}
-  }
-
-  translate(v = [20, -20, 210]) rotate([90, 0, 0]) psu();
-
-//  translate(v = [10, 0, 0]) {
-//    //for (i=[0:1]) {translate(v = [10, -20 - 100, 75 + (42 / sin(35) + 5) * i]) rotate([90 - 35, 0, 0]) disk();}
-//    translate(v = [0, -20 - 50, 175]) rotate([90 - 15, 0, 0]) disk();
-//  }
-
-  translate(v = [500, -20, 340]) rotate([90, 30, 0]) flow_indicator();
+//  translate(v = [500, -20, 340]) rotate([90, 30, 0]) flow_indicator();
 }
 
