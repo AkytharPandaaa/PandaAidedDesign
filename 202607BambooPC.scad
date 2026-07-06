@@ -35,7 +35,7 @@ module radiator(fan_od = 140, fans = 2) {
     }
   }
 
-  for (i=[0:fans-1]) translate(v = [30 + fan_od*i, 0, fan_od == 140 ? 40 : 30]) fan(od = fan_od, thickness = 25);
+  for (i=[0:fans-1]) translate(v = [30 + fan_od*i, 0, fan_od == 140 ? -25 : 30]) fan(od = fan_od, thickness = 25);
 }
 
 module mainboard(atx = false) {
@@ -47,7 +47,7 @@ module mainboard(atx = false) {
 }
 
 module pump_agb() {
-  color("#000000") cube(size = [70, 71, 131], center = false);
+  color("#444444") cube(size = [70, 71, 131], center = false);
 }
 
 module ssd() {
@@ -55,7 +55,7 @@ module ssd() {
 }
 
 module psu() {
-  color("#111111") cube(size = [150, 160, 86], center = false);
+  color("#333333") cube(size = [150, 160, 86], center = false);
 }
 
 module flow_indicator() {
@@ -73,17 +73,18 @@ module io() {
 
 // ===================================================================================
 
-translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
+module board(thickness = 18) {
+  color("#ba8c63") rotate(a = 90, v = [1,0,0])  cube(size = [700, 400, thickness], center = false);  // mounting board
+}
 
-translate(v = [0, 0, 100]) union() {
-  color("#ba8c63") rotate(a = 90, v = [1,0,0])  cube(size = [700, 400, 18], center = false);  // mounting board
+module components(atx = false) {
 
   // radiators
-  translate(v = [300, 60, 400]) rotate([180, -25, 0]) mirror([1, 0, 0]) radiator(fan_od = 140, fans = 2);
-  translate(v = [400, 60, 400]) rotate([180, 25, 0]) radiator(fan_od = 140, fans = 2);
+  translate(v = [300, 72, 400]) rotate([180, -25, 0]) mirror([1, 0, 0]) radiator(fan_od = 140, fans = 2);
+  translate(v = [400, 72, 400]) rotate([180, 25, 0]) radiator(fan_od = 140, fans = 2);
   translate(v = [350 + 60, 0, 300]) rotate([0, 90, 90]) radiator(fan_od = 120, fans = 2);
 
-  translate(v = [180, -20, 20]) rotate(a = 90, v = [1,0,0])  mainboard(atx = true);
+  translate(v = [180, -20, 20]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
 
   translate(v = [70, -100, 20]) pump_agb();
 
@@ -96,19 +97,31 @@ translate(v = [0, 0, 100]) union() {
   translate(v = [350, -20, 365]) rotate([90, 0, 0]) flow_indicator();
 }
 
-union() color("#ffc000") { // tubes
-  translate(v = [105, 30, 265]) rotate([90, 0, 0])  cylinder(h = 100, d = 14, center = false);
-  translate(v = [155, 35, 210]) rotate([90, 0, 0])  cylinder(h = 105, d = 14, center = false);
+module tubes() {
+  union() color("#ffc000") {
+     // tubes
+    translate(v = [105, 30, 265]) rotate([90, 0, 0])  cylinder(h = 100, d = 14, center = false);
+    translate(v = [155, 35, 210]) rotate([90, 0, 0])  cylinder(h = 105, d = 14, center = false);
 
-  // horizontal front
-  translate(v = [120, -70, 150]) rotate([0, 90, 0])  cylinder(h = 185, d = 14, center = false);
-  translate(v = [255, -70, 210]) rotate([0, 90, 0])  cylinder(h = 50, d = 14, center = false);
-  translate(v = [155, -70, 210]) rotate([0, 90, 0])  cylinder(h = 90, d = 14, center = false);
+    // horizontal front
+    translate(v = [120, -70, 150]) rotate([0, 90, 0])  cylinder(h = 185, d = 14, center = false);
+    translate(v = [255, -70, 210]) rotate([0, 90, 0])  cylinder(h = 50, d = 14, center = false);
+    translate(v = [155, -70, 210]) rotate([0, 90, 0])  cylinder(h = 90, d = 14, center = false);
 
-  // back
-  translate(v = [155, 35, 210]) rotate([0, 35, 0])  cylinder(h = 275, d = 14, center = false);
-  translate(v = [105, 35, 265]) rotate([0, 60, 0])  cylinder(h = 240, d = 14, center = false);
-  translate(v = [385, 35, 385]) rotate([0, 10, 0])  cylinder(h = 75, d = 14, center = false);
-  translate(v = [310, 35, 435]) rotate([0, -25, 0])  cylinder(h = 30, d = 14, center = false);
+    // back
+    translate(v = [155, 35, 210]) rotate([0, 35, 0])  cylinder(h = 275, d = 14, center = false);
+    translate(v = [105, 35, 265]) rotate([0, 60, 0])  cylinder(h = 240, d = 14, center = false);
+    translate(v = [385, 35, 385]) rotate([0, 10, 0])  cylinder(h = 75, d = 14, center = false);
+    translate(v = [310, 35, 435]) rotate([0, -25, 0])  cylinder(h = 30, d = 14, center = false);
+  }
 }
+
+// ===================================================================================
+
+translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
+
+translate(v = [0, 0, 100]) board(thickness = 18);
+translate(v = [0, 0, 100]) components(atx = true);
+
+tubes();
 
