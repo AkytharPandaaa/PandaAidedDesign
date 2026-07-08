@@ -126,24 +126,29 @@ module radiator_angle(depth, thickness = 3) {
   }
 }
 
-module printed_parts() {
+module printed_parts(rad_angle) {
   color("#555555") union() {
-    radiator_angle(depth = 100);
+    translate(v = [65, 0, 259]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 100);
     translate(v = [(700 - 244)/2, -20, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20);
   }
 }
 
 // ===================================================================================
 
-module board(thickness = 18) {
-  color("#ba8c63") rotate(a = 90, v = [1,0,0])  cube(size = [700, 400, thickness], center = false);  // mounting board
+module board(rad_angle, thickness = 18) {
+  color("#ba8c63") difference() {
+    rotate(a = 90, v = [1,0,0])  cube(size = [700, 400, thickness], center = false);  // mounting board
+
+    translate(v = [0, -20, 260]) rotate([0, -rad_angle, 0])  cube(size = [500, 50, 500], center = false);
+    translate(v = [400, -20, 400]) rotate([0, rad_angle, 0])  cube(size = [500, 50, 500], center = false);
+  }
 }
 
-module components(atx = false) {
+module components(atx = false, rad_angle = 25) {
 
   // radiators
-  translate(v = [300, 72, 400]) rotate([180, -25, 0]) mirror([1, 0, 0]) radiator(fan_od = 140, fans = 2);
-  translate(v = [400, 72, 400]) rotate([180, 25, 0]) radiator(fan_od = 140, fans = 2);
+  translate(v = [300, 72, 400]) rotate([180, -rad_angle, 0]) mirror([1, 0, 0]) radiator(fan_od = 140, fans = 2);
+  translate(v = [400, 72, 400]) rotate([180, rad_angle, 0]) radiator(fan_od = 140, fans = 2);
   translate(v = [350 + 60, 0, 280 + 50]) rotate([0, 90, 90]) radiator(fan_od = 120, fans = 2);
 
   translate(v = [(atx ? (700 - 304)/2 : (700 - 244) / 2), -20 - 20, 15]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
@@ -180,13 +185,16 @@ module tubes() {
 
 // ===================================================================================
 
-translate(v = [0, 0, 0]) {
+translate(v = [-350, 0, 0]) {
+  rad_angle = 25;
+
   //translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
 
-  translate(v = [0, 0, 100]) board(thickness = 18);
-  translate(v = [0, 0, 100]) components(atx = true);
+  translate(v = [0, 0, 100]) board(thickness = 18, rad_angle = rad_angle);
+  translate(v = [0, 0, 100]) components(atx = true, rad_angle = rad_angle);
 
-  //translate(v = [0, 0, 0]) tubes();
+  tubes();
+  
+  printed_parts(rad_angle = rad_angle);
 }
 
-printed_parts();
