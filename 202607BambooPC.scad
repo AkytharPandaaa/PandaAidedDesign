@@ -2,6 +2,8 @@
 
 use <Parts/Screw.scad>
 
+use <202507MainboardTestBench.scad>
+
 $fn = $preview ? 25 : 125;
 
 module steckerleiste(plugs = 6) {
@@ -81,10 +83,8 @@ module radiator_angle(depth, thickness = 3) {
   fins_to_case_offset = 4.2;
   dustfilter_thickness = 5;
   height = 14;
-
-  // TODO: integrate rails for the dust filter from lancool 207
   
-  color("#444444") difference() {
+  difference() {
     union() {
       // planes
       translate(v = [0, 0, 0]) cube(size = [thickness, depth * .75, height], center = false);
@@ -93,6 +93,8 @@ module radiator_angle(depth, thickness = 3) {
 
       // fin support
       translate(v = [0, depth * .75, 0]) cube(size = [depth - 11.5, fins_to_case_offset + .1, height], center = false);
+
+      // TODO: integrate rails for the dust filter from lancool 207
 
       // rail dust filter
       translate(v = [0, depth * .75 - thickness * 2 - dustfilter_thickness, 0]) cube(size = [depth - 11.5, thickness, height], center = false);
@@ -124,6 +126,13 @@ module radiator_angle(depth, thickness = 3) {
   }
 }
 
+module printed_parts() {
+  color("#555555") union() {
+    radiator_angle(depth = 100);
+    translate(v = [(700 - 244)/2, -20, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20);
+  }
+}
+
 // ===================================================================================
 
 module board(thickness = 18) {
@@ -135,9 +144,9 @@ module components(atx = false) {
   // radiators
   translate(v = [300, 72, 400]) rotate([180, -25, 0]) mirror([1, 0, 0]) radiator(fan_od = 140, fans = 2);
   translate(v = [400, 72, 400]) rotate([180, 25, 0]) radiator(fan_od = 140, fans = 2);
-  translate(v = [350 + 60, 0, 300]) rotate([0, 90, 90]) radiator(fan_od = 120, fans = 2);
+  translate(v = [350 + 60, 0, 280 + 50]) rotate([0, 90, 90]) radiator(fan_od = 120, fans = 2);
 
-  translate(v = [(atx ? (700 - 304)/2 : (700 - 244) / 2), -20, 15]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
+  translate(v = [(atx ? (700 - 304)/2 : (700 - 244) / 2), -20 - 20, 15]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
 
   translate(v = [70, -100, 30]) pump_agb();
 
@@ -171,8 +180,8 @@ module tubes() {
 
 // ===================================================================================
 
-translate(v = [-350, 0, 0]) {
-  translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
+translate(v = [0, 0, 0]) {
+  //translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
 
   translate(v = [0, 0, 100]) board(thickness = 18);
   translate(v = [0, 0, 100]) components(atx = true);
@@ -180,4 +189,4 @@ translate(v = [-350, 0, 0]) {
   //translate(v = [0, 0, 0]) tubes();
 }
 
-radiator_angle(depth = 100);
+printed_parts();
