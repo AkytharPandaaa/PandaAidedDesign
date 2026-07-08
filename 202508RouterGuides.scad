@@ -57,6 +57,31 @@ module ulatte_cutout() {
   }
 }
 
+// SOLID GUIDES =====================================================================================
+
+module solid_circular(diameter) {
+  size = 140;
+  height = 5;
+  
+  if (diameter > size - 28) {
+    echo("ERROR: diameter has to be less than 112 mm");
+    diameter = 0;
+  }
+
+  difference() {
+    cylinder(h = height, d = size, center = true);
+    cylinder(h = height + .2, d = diameter, center = true);
+  
+    for (i=[0:3]) rotate([0, 0, 90 * i])  translate(v = [size/2 - 7, 0, height/2 - .5]) screw(diameter=3.5, length=16, cutout_sample=true);
+
+    translate(v = [140/2 - 9, 3, -height/2 - .1]) rotate(a = 90, v = [0, 0, -1])  linear_extrude(height = 1) {
+      mirror(v = [1, 0]) text(text = str(diameter), font = "Lilex Nerd Font Mono", size = 5);
+    }
+  }
+}
+
 // circular desk cable management guide:
-circular_guide(diameter=60, depth=22.5 - 10, support_plate_height=24, min_depth=3);
+//circular_guide(diameter=60, depth=22.5 - 10, support_plate_height=24, min_depth=3);
 //ulatte_cutout();
+
+solid_circular(diameter = 25);
