@@ -1,5 +1,9 @@
 // created by AkytharPandaaa
 
+use <Parts/Screw.scad>
+
+$fn = $preview ? 25 : 125;
+
 module steckerleiste(plugs = 6) {
   difference() {
     color("#555555") cube(size = [102 + plugs * 53, 60, 50], center = false);
@@ -73,6 +77,55 @@ module io() {
 
 // ===================================================================================
 
+module radiator_angle(depth, thickness = 3) {
+  fins_to_case_offset = 4.2;
+  dustfilter_thickness = 5;
+  height = 14;
+
+  // TODO: integrate rails for the dust filter from lancool 207
+  
+  color("#444444") difference() {
+    union() {
+      // planes
+      translate(v = [0, 0, 0]) cube(size = [thickness, depth * .75, height], center = false);
+      translate(v = [0, depth * .75 - thickness, 0]) cube(size = [depth, thickness, height], center = false);
+      translate(v = [0, 0, 0]) cube(size = [depth, depth * .75, thickness], center = false);
+
+      // fin support
+      translate(v = [0, depth * .75, 0]) cube(size = [depth - 11.5, fins_to_case_offset + .1, height], center = false);
+
+      // rail dust filter
+      translate(v = [0, depth * .75 - thickness * 2 - dustfilter_thickness, 0]) cube(size = [depth - 11.5, thickness, height], center = false);
+    }
+
+    // angle
+    translate(v = [0, 0, -.1]) linear_extrude(height = height + .2) {
+      polygon(points = [
+        [-.1, -.1],
+        [depth + .1, 0],
+        [depth + .1, depth * .75 + .1],
+      ]);
+    }
+
+    // rail
+    translate(v = [-.1, depth * .75 - thickness - dustfilter_thickness, thickness]) 
+      cube(size = [thickness + .2, dustfilter_thickness, height], center = false);
+
+    // radiator screw
+    translate(v = [depth - 7.3, depth * .75 + .1, 4.4]) rotate(a = 90, v = [1, 0, 0])  union() {
+      cylinder(h = .4 + .1, d = 7, center = false);
+      cylinder(h = 2.5 + .1, d = 4.2 + .15, center = false);
+      translate(v = [0, 0, 2.5]) cylinder(h = 5, d = 5.6 + .1, center = false);
+    }
+
+    // wood screws
+    translate(v = [thickness, height/2, height/2]) rotate(a = 90, v = [0, 1, 0]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+    translate(v = [thickness, height/2 + depth*.75 - thickness*3 - height, height/2]) rotate(a = 90, v = [0, 1, 0]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+  }
+}
+
+// ===================================================================================
+
 module board(thickness = 18) {
   color("#ba8c63") rotate(a = 90, v = [1,0,0])  cube(size = [700, 400, thickness], center = false);  // mounting board
 }
@@ -84,15 +137,15 @@ module components(atx = false) {
   translate(v = [400, 72, 400]) rotate([180, 25, 0]) radiator(fan_od = 140, fans = 2);
   translate(v = [350 + 60, 0, 300]) rotate([0, 90, 90]) radiator(fan_od = 120, fans = 2);
 
-  translate(v = [180, -20, 20]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
+  translate(v = [(atx ? (700 - 304)/2 : (700 - 244) / 2), -20, 15]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
 
-  translate(v = [70, -100, 20]) pump_agb();
+  translate(v = [70, -100, 30]) pump_agb();
 
-  translate(v = [50, -20, 10]) rotate([90, -90, 0]) io();
+  translate(v = [50, -20, 15]) rotate([90, -90, 0]) io();
 
   for (i=[0:1]) {translate(v = [150, 7, 20 + 115 * i]) rotate([90, 0, 0]) ssd();}
 
-  translate(v = [520, -20, 20]) rotate([90, 0, 0]) psu();
+  translate(v = [535, -20, 15]) rotate([90, 0, 0]) psu();
 
   translate(v = [350, -20, 365]) rotate([90, 0, 0]) flow_indicator();
 }
@@ -118,10 +171,13 @@ module tubes() {
 
 // ===================================================================================
 
-translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
+translate(v = [-350, 0, 0]) {
+  translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
 
-translate(v = [0, 0, 100]) board(thickness = 18);
-translate(v = [0, 0, 100]) components(atx = true);
+  translate(v = [0, 0, 100]) board(thickness = 18);
+  translate(v = [0, 0, 100]) components(atx = true);
 
-tubes();
+  //translate(v = [0, 0, 0]) tubes();
+}
 
+radiator_angle(depth = 100);
