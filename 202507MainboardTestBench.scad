@@ -212,10 +212,14 @@ module mainboard_support_grid(mainboard, standoff_height, strap_height = 3) {
         }
       }
       // plate mounting holes
+      // --- horizontal screws
       translate(v=[MAINBOARD_SCREW_POSITIONS[1][0], -MAINBOARD_SCREW_POSITIONS[0][1] - MAINBOARD_SCREW_POSITIONS[1][1] / 2, strap_height + 2]) {
         screw_metric_countersunk(standard=3, length=12);
         translate(v=[-MAINBOARD_SCREW_POSITIONS[1][0] + MAINBOARD_SCREW_POSITIONS[4][0], 0, 0]) screw_metric_countersunk(standard=3, length=12);
+        translate(v=[-MAINBOARD_SCREW_POSITIONS[1][0] + MAINBOARD_SCREW_POSITIONS[9][0], 0, 0]) screw_metric_countersunk(standard=3, length=12);
       }
+      
+      // --- vertical screws
       translate(v=[(MAINBOARD_SCREW_POSITIONS[0][0] + MAINBOARD_SCREW_POSITIONS[4][0]) / 2, -MAINBOARD_SCREW_POSITIONS[0][1], strap_height + 2]) {
         screw_metric_countersunk(standard=3, length=12);
         translate(v=[0, MAINBOARD_SCREW_POSITIONS[0][1] - MAINBOARD_SCREW_POSITIONS[1][1], 0]) screw_metric_countersunk(standard=3, length=12);
