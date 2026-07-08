@@ -126,10 +126,26 @@ module radiator_angle(depth, thickness = 3) {
   }
 }
 
+module pipe_passthrough() {
+  difference() {
+    cube(size = [50, 35, 3], center = false);
+
+    translate(v = [25, 17.5, -14 - 1.5 + 3]) union() {
+      cylinder(h = 14 + .2, d = 21, center = false);
+      translate(v = [0, 0, 14 + .1]) cylinder(h = 2.6 + .1, d = 25.1 + .15, center = false);
+    }  
+
+    translate(v = [5, 5, 3]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+    translate(v = [50 - 5, 35 - 5, 3]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+  }
+}
+
 module printed_parts(rad_angle) {
   color("#555555") union() {
     translate(v = [65, 0, 259]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 100);
     translate(v = [(700 - 244)/2, -20, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20);
+
+    pipe_passthrough();
   }
 }
 
@@ -185,7 +201,7 @@ module tubes() {
 
 // ===================================================================================
 
-translate(v = [-350, 0, 0]) {
+translate(v = [-350 * 0, 0, 0]) {
   rad_angle = 25;
 
   //translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
