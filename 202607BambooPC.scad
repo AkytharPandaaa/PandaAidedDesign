@@ -167,19 +167,19 @@ module components(atx = false, rad_angle = 25) {
 module tubes() {
   union() color("#ffc000") {
      // tubes
-    translate(v = [105, 30, 265]) rotate([90, 0, 0])  cylinder(h = 100, d = 14, center = false);
-    translate(v = [155, 35, 210]) rotate([90, 0, 0])  cylinder(h = 105, d = 14, center = false);
+    translate(v = [105, 30, 290]) rotate([90, 0, 0])  cylinder(h = 100, d = 14, center = false);
+    translate(v = [155, 45, 210]) rotate([90, 0, 0])  cylinder(h = 135, d = 14, center = false);
 
     // horizontal front
-    translate(v = [120, -70, 150]) rotate([0, 90, 0])  cylinder(h = 185, d = 14, center = false);
-    translate(v = [255, -70, 210]) rotate([0, 90, 0])  cylinder(h = 50, d = 14, center = false);
-    translate(v = [155, -70, 210]) rotate([0, 90, 0])  cylinder(h = 90, d = 14, center = false);
+    translate(v = [120, -90, 175]) rotate([0, 90, 0])  cylinder(h = 185, d = 14, center = false);
+    translate(v = [255, -90, 210]) rotate([0, 90, 0])  cylinder(h = 50, d = 14, center = false);
+    translate(v = [155, -90, 210]) rotate([0, 90, 0])  cylinder(h = 90, d = 14, center = false);
 
     // back
-    translate(v = [155, 35, 210]) rotate([0, 35, 0])  cylinder(h = 275, d = 14, center = false);
-    translate(v = [105, 35, 265]) rotate([0, 60, 0])  cylinder(h = 240, d = 14, center = false);
-    translate(v = [385, 35, 385]) rotate([0, 10, 0])  cylinder(h = 75, d = 14, center = false);
-    translate(v = [310, 35, 435]) rotate([0, -25, 0])  cylinder(h = 30, d = 14, center = false);
+    translate(v = [155, 45, 210]) rotate([0, 35, 0])  cylinder(h = 275, d = 14, center = false);
+    translate(v = [105, 35, 290]) rotate([0, 59, 0])  cylinder(h = 250, d = 14, center = false);
+    translate(v = [385, 35, 410]) rotate([0, 10, 0])  cylinder(h = 50, d = 14, center = false);
+    translate(v = [310, 45, 435]) rotate([0, -25, 0])  cylinder(h = 30, d = 14, center = false);
   }
 }
 
