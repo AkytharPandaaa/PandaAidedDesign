@@ -157,7 +157,7 @@ module components(atx = false, rad_angle = 25) {
 
   translate(v = [50, -20, 15]) rotate([90, -90, 0]) io();
 
-  for (i=[0:1]) {translate(v = [150, 7, 20 + 115 * i]) rotate([90, 0, 0]) ssd();}
+  for (i=[0:1]) {translate(v = [450, 7, 20 + 115 * i]) rotate([90, 0, 0]) ssd();}
 
   translate(v = [535, -20, 15]) rotate([90, 0, 0]) psu();
 
