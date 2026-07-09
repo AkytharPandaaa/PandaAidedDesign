@@ -14,6 +14,7 @@ DEVICE_HEIGHT = 12.5;
 //DELL 130W PSU DEVICE_WIDTH = 76.2; DEVICE_HEIGHT = 24.4;
 //HP 120W PSU DEVICE_WIDTH = 68.6; DEVICE_HEIGHT = 25.2;
 //USB Cable Plug DEVICE_WIDTH = 11; DEVICE_HEIGHT = 14.5;
+//ATX PSU DEVICE_WIDTH = 150; DEVICE_HEIGHT = 86;
 
 MATERIAL_THICKNESS = 2.5;
 SCREW_DIAMETER = 3.5;
@@ -68,4 +69,4 @@ module uBracket(screwSocketWidth, thicknessBracket, deviceWidth, deviceHeight, c
     }
   }
 }
-uBracket(screwSocketWidth=SCREW_DIAMETER * 4, thicknessBracket=MATERIAL_THICKNESS, deviceWidth=30, deviceHeight=10, chamfer=1);
+uBracket(screwSocketWidth=SCREW_DIAMETER * 4, thicknessBracket=MATERIAL_THICKNESS, deviceWidth=DEVICE_WIDTH, deviceHeight=DEVICE_HEIGHT, chamfer=1);
