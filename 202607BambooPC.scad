@@ -184,7 +184,7 @@ module pump_bracket() {
       cylinder(d = 7 + 1, h = plate_thickness - 1 * 2 + .1);
     } 
     
-    for (i=[0:1]) translate(v = [7 + (pump_size - 14) * i, pump_size + 12 - plate_thickness, -7]) rotate([90, 0, 0])  screw(diameter = 3.5, length = 12, cutout_sample = true);
+    for (i=[0:1]) translate(v = [7 + (pump_size - 14) * i, pump_size + 12 - plate_thickness, -7]) rotate([90, 0, 0]) screw(diameter = 3.5, length = 12, cutout_sample = true);
   }
 }
 
@@ -193,6 +193,20 @@ module psu_brackets() {
 
   translate(v = [-15, 0, 20]) rotate([180, 0, 0]) uBracket(screwSocketWidth=14, thicknessBracket=3, deviceWidth=150, deviceHeight=86, chamfer=1);
   translate(v = [-15, 0, 150]) rotate([180, 0, 0]) uBracket(screwSocketWidth=14, thicknessBracket=3, deviceWidth=150, deviceHeight=86, chamfer=1);
+}
+
+module ssd_plate() {
+  height = 69.8;
+  corners = 5;
+
+  difference() {
+    translate(v = [corners, corners, 0]) minkowski() {
+      cube(size = [100 + 14 - corners*2, 69.8 - corners*2, 2.5], center = false);
+      cylinder(h = 0.001, r = corners, center = false);
+    }
+
+    for (i=[0:1]) translate(v = [7, 7 + (69.8 - 14)*i, 2.5]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+  }
 }
 
 module printed_parts(rad_angle) {
@@ -206,6 +220,8 @@ module printed_parts(rad_angle) {
     translate(v = [125 - 30, -18 - 70, 130 - 3.5]) pump_bracket();
 
     translate(v = [534, -18, 100 + 16]) psu_brackets();
+
+    for (i=[0:1]) translate(v = [450 - 14, 0, 100 + 90 + 115*i]) rotate([-90, 0, 0])  ssd_plate();
   }
 }
 
@@ -233,7 +249,7 @@ module components(atx = false, rad_angle = 25) {
 
   translate(v = [50, -18, 15]) rotate([90, -90, 0]) io();
 
-  for (i=[0:1]) {translate(v = [450, 7, 20 + 115 * i]) rotate([90, 0, 0]) ssd();}
+  for (i=[0:1]) {translate(v = [450, 7 + 2.5, 20 + 115 * i]) rotate([90, 0, 0]) ssd();}
 
   translate(v = [534, -18, 16]) rotate([90, 0, 0]) psu();
 
