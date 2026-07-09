@@ -209,10 +209,40 @@ module ssd_plate() {
   }
 }
 
+module slot_support(slots) {
+  slot_width = 39 / 2;
+  slot_height = 114 + 6 + 11;
+  slot_screwing_depth = 12;
+
+  material_thickness = 3;
+  support_depth = 12;
+
+  difference() {
+    union() {
+      translate(v = [0, 0, 5]) difference() {
+        cube(size = [slot_width * slots + material_thickness*2, support_depth + material_thickness, slot_height], center = false);
+        translate(v = [material_thickness, -.1, material_thickness]) 
+          cube(size = [slot_width * slots, support_depth + 1 + .1, slot_height - material_thickness * 2], center = false);
+
+        translate(v = [material_thickness + 3, support_depth + 1 - .1, slot_height - 105 - material_thickness]) 
+          cube(size = [slot_width * slots - material_thickness*2, 2 + .2, 105], center = false);
+
+        for (i=[0:slots-1])
+          translate(v = [material_thickness*2 + slot_width * i, 17 - slot_screwing_depth/2, slot_height - material_thickness - .1]) 
+            cylinder(h = 3 + .2, d = 2.7, center = false);
+      }
+      cube(size = [slot_width * slots + material_thickness*2, support_depth + material_thickness, 5 + .1], center = false);    
+    }
+
+    for (i=[0:slots-1 - 1]) translate(v = [material_thickness + (slot_width * slots) / slots * (i+1), support_depth/2, 5]) screw(diameter = 3.5, length = 35, cutout_sample = true);
+  }
+}
+
 module printed_parts(rad_angle) {
-  color("#555555") union() {
-    translate(v = [65, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 63);
+  color("#bbbbbb") union() {
     //translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20); // commented due to performance issues
+
+    translate(v = [65, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
 
     translate(v = [125 - 15, -18, 338 + 25]) rotate([90, 90, 0])  pipe_passthrough();
     translate(v = [181 - 15, -18, 230 + 25]) rotate([90, 90, 0])  pipe_passthrough();
@@ -222,6 +252,8 @@ module printed_parts(rad_angle) {
     translate(v = [534, -18, 100 + 16]) psu_brackets();
 
     for (i=[0:1]) translate(v = [450 - 14, 0, 100 + 90 + 115*i]) rotate([-90, 0, 0])  ssd_plate();
+
+    translate(v = [700 - 316, -18, 100]) rotate([90, 0, 0])  slot_support(slots = 5);
   }
 }
 
@@ -283,7 +315,7 @@ translate(v = [-350 * 0, 0, 0]) {
   //translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
 
   translate(v = [0, 0, 100]) board(thickness = 18, rad_angle = rad_angle);
-  translate(v = [0, 0, 100]) components(atx = true, rad_angle = rad_angle);
+  translate(v = [0, 0, 100]) components(atx = false, rad_angle = rad_angle);
 
   tubes();
   
