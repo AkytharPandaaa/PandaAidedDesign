@@ -2,6 +2,8 @@
 
 use <Parts/Screw.scad>
 
+use <202303uBracket.scad>
+use <202306lBracket.scad>
 use <202507MainboardTestBench.scad>
 
 $fn = $preview ? 25 : 125;
@@ -186,17 +188,24 @@ module pump_bracket() {
   }
 }
 
+module psu_brackets() {
+  translate(v = [(150 - 42.5)/2, -14, 0]) rotate([0, 90, 0])  LBracket(screws=3, width=42.5);
 
+  translate(v = [-15, 0, 20]) rotate([180, 0, 0]) uBracket(screwSocketWidth=14, thicknessBracket=3, deviceWidth=150, deviceHeight=86, chamfer=1);
+  translate(v = [-15, 0, 150]) rotate([180, 0, 0]) uBracket(screwSocketWidth=14, thicknessBracket=3, deviceWidth=150, deviceHeight=86, chamfer=1);
+}
 
 module printed_parts(rad_angle) {
   color("#555555") union() {
     translate(v = [65, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 63);
-    //translate(v = [(700 - 244)/2, -20, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20); // commented due to performance issues
+    //translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20); // commented due to performance issues
 
-    translate(v = [125 - 15, -20, 338 + 25]) rotate([90, 90, 0])  pipe_passthrough();
-    translate(v = [181 - 15, -20, 230 + 25]) rotate([90, 90, 0])  pipe_passthrough();
+    translate(v = [125 - 15, -18, 338 + 25]) rotate([90, 90, 0])  pipe_passthrough();
+    translate(v = [181 - 15, -18, 230 + 25]) rotate([90, 90, 0])  pipe_passthrough();
 
-    translate(v = [125 - 30, -20 - 70, 130 - 3.5]) pump_bracket();
+    translate(v = [125 - 30, -18 - 70, 130 - 3.5]) pump_bracket();
+
+    translate(v = [534, -18, 100 + 16]) psu_brackets();
   }
 }
 
@@ -218,17 +227,17 @@ module components(atx = false, rad_angle = 25) {
   translate(v = [400, 72, 400]) rotate([180, rad_angle, 0]) radiator(fan_od = 140, fans = 2);
   translate(v = [350 + 60, 0, 280 + 50]) rotate([0, 90, 90]) radiator(fan_od = 120, fans = 2);
 
-  translate(v = [(atx ? (700 - 304)/2 : (700 - 244) / 2), -20 - 20, 15]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
+  translate(v = [(atx ? (700 - 304)/2 : (700 - 244) / 2), -18 - 20, 15]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
 
   translate(v = [125 - 35, -100, 30]) pump_agb();
 
-  translate(v = [50, -20, 15]) rotate([90, -90, 0]) io();
+  translate(v = [50, -18, 15]) rotate([90, -90, 0]) io();
 
   for (i=[0:1]) {translate(v = [450, 7, 20 + 115 * i]) rotate([90, 0, 0]) ssd();}
 
-  translate(v = [535, -20, 15]) rotate([90, 0, 0]) psu();
+  translate(v = [534, -18, 16]) rotate([90, 0, 0]) psu();
 
-  translate(v = [350, -20, 365]) rotate([90, 0, 0]) flow_indicator();
+  translate(v = [350, -18, 365]) rotate([90, 0, 0]) flow_indicator();
 }
 
 module tubes() {
