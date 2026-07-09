@@ -127,25 +127,76 @@ module radiator_angle(depth, thickness = 3) {
 }
 
 module pipe_passthrough() {
-  difference() {
-    cube(size = [50, 35, 3], center = false);
+  width = 50;
+  height = 30;
 
-    translate(v = [25, 17.5, -14 - 1.5 + 3]) union() {
+  corners = 4;
+  
+  difference() {
+
+    translate(v = [corners, corners, 0]) minkowski() {
+      cube(size = [width - corners * 2, height - corners * 2, 3], center = false);
+      cylinder(h = 0.01, d = corners * 2, center = false);
+    }
+
+    translate(v = [width/2, height/2, -14 - 1.5 + 3]) union() {
       cylinder(h = 14 + .2, d = 21, center = false);
-      translate(v = [0, 0, 14 + .1]) cylinder(h = 2.6 + .1, d = 25.1 + .15, center = false);
+      translate(v = [0, 0, 14 + .1]) cylinder(h = 2.6 + .1, d = width/2 + .1 + .15, center = false);
     }  
 
     translate(v = [5, 5, 3]) screw(diameter = 3.5, length = 12, cutout_sample = true);
-    translate(v = [50 - 5, 35 - 5, 3]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+    translate(v = [width - 5, height - 5, 3]) screw(diameter = 3.5, length = 12, cutout_sample = true);
   }
 }
 
+module pump_bracket() {
+  pump_size = 50 + 10;
+  plate_thickness = 3.5;
+
+  corners = 4;
+
+  difference() {
+    union() {
+      translate(v = [corners, corners, 0]) minkowski() {
+        cube(size = [pump_size - corners * 2, pump_size - corners * 2, plate_thickness], center = false);
+        cylinder(h = 0.01, d = corners * 2, center = false);
+      }
+      translate(v = [0, pump_size - corners, 0]) cube(size = [pump_size, 12 + corners, plate_thickness], center = false);
+
+      translate(v = [0, pump_size + 12 - plate_thickness, -corners]) cube(size = [pump_size, plate_thickness, corners + plate_thickness], center = false);
+      translate(v = [corners, pump_size + 12 - plate_thickness, -corners/2]) rotate(a = 90, v = [-1, 0, 0])  minkowski() {
+        cube(size = [pump_size - corners*2, 14 + plate_thickness - corners*2, plate_thickness], center = false);
+        cylinder(h = 0.01, d = corners * 2, center = false);
+      }
+
+      support_w = pump_size - 25;
+      translate(v = [(pump_size - support_w)/2 + support_w, pump_size + 12, -14]) rotate([90, 0, -90])  linear_extrude(height = support_w) {
+        polygon(points = [
+          [0, 0], [pump_size + .1, 14 + .1], [0, 14 + .1]
+        ]);
+      }
+    }
+
+    for (i=[0:1]) for (j=[0:1]) translate(v = [5 + 50 * i, 5 + 50 * j, -.1]) {
+      cylinder(d = 4 + 1, h = plate_thickness + .2);
+      cylinder(d = 7 + 1, h = plate_thickness - 1 * 2 + .1);
+    } 
+    
+    for (i=[0:1]) translate(v = [7 + (pump_size - 14) * i, pump_size + 12 - plate_thickness, -7]) rotate([90, 0, 0])  screw(diameter = 3.5, length = 12, cutout_sample = true);
+  }
+}
+
+
+
 module printed_parts(rad_angle) {
   color("#555555") union() {
-    translate(v = [65, 0, 259]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 100);
-    translate(v = [(700 - 244)/2, -20, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20);
+    translate(v = [65, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 63);
+    //translate(v = [(700 - 244)/2, -20, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20); // commented due to performance issues
 
-    pipe_passthrough();
+    translate(v = [125 - 15, -20, 338 + 25]) rotate([90, 90, 0])  pipe_passthrough();
+    translate(v = [181 - 15, -20, 230 + 25]) rotate([90, 90, 0])  pipe_passthrough();
+
+    translate(v = [125 - 30, -20 - 70, 130 - 3.5]) pump_bracket();
   }
 }
 
@@ -169,7 +220,7 @@ module components(atx = false, rad_angle = 25) {
 
   translate(v = [(atx ? (700 - 304)/2 : (700 - 244) / 2), -20 - 20, 15]) rotate(a = 90, v = [1,0,0])  mainboard(atx);
 
-  translate(v = [70, -100, 30]) pump_agb();
+  translate(v = [125 - 35, -100, 30]) pump_agb();
 
   translate(v = [50, -20, 15]) rotate([90, -90, 0]) io();
 
@@ -183,13 +234,13 @@ module components(atx = false, rad_angle = 25) {
 module tubes() {
   union() color("#ffc000") {
      // tubes
-    translate(v = [105, 30, 100 + 238]) rotate([90, 0, 0])  cylinder(h = 100, d = 14, center = false);
-    translate(v = [155, 45, 100 + 130]) rotate([90, 0, 0])  cylinder(h = 135, d = 14, center = false);
+    translate(v = [125, 30, 100 + 238]) rotate([90, 0, 0])  cylinder(h = 100, d = 14, center = false);
+    translate(v = [181, 45, 100 + 130]) rotate([90, 0, 0])  cylinder(h = 135, d = 14, center = false);
 
     // horizontal front
     translate(v = [120, -90, 100 + 80]) rotate([0, 90, 0])  cylinder(h = 185, d = 14, center = false);
     translate(v = [255, -90, 100 + 130]) rotate([0, 90, 0])  cylinder(h = 50, d = 14, center = false);
-    translate(v = [155, -90, 100 + 130]) rotate([0, 90, 0])  cylinder(h = 90, d = 14, center = false);
+    translate(v = [181, -90, 100 + 130]) rotate([0, 90, 0])  cylinder(h = 64, d = 14, center = false);
 
     // back
     translate(v = [155, 45, 100 + 130]) rotate([0, 37, 0])  cylinder(h = 260, d = 14, center = false);
