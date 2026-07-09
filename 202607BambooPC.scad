@@ -83,48 +83,44 @@ module io() {
 
 module radiator_angle(depth, thickness = 3) {
   fins_to_case_offset = 4.2;
-  dustfilter_thickness = 5;
+  dustfilter_thickness = 7 + .15;
   height = 14;
-  
+
   difference() {
     union() {
-      // planes
-      translate(v = [0, 0, 0]) cube(size = [thickness, depth * .75, height], center = false);
-      translate(v = [0, depth * .75 - thickness, 0]) cube(size = [depth, thickness, height], center = false);
-      translate(v = [0, 0, 0]) cube(size = [depth, depth * .75, thickness], center = false);
+      cube(size = [depth + 4 + 2.5, depth * 0.7, height], center = false);
 
       // fin support
-      translate(v = [0, depth * .75, 0]) cube(size = [depth - 11.5, fins_to_case_offset + .1, height], center = false);
-
-      // TODO: integrate rails for the dust filter from lancool 207
-
-      // rail dust filter
-      translate(v = [0, depth * .75 - thickness * 2 - dustfilter_thickness, 0]) cube(size = [depth - 11.5, thickness, height], center = false);
+      translate(v = [0, depth * .7, 3]) cube(size = [depth - 11.5, fins_to_case_offset + .1, height - 3], center = false);
     }
+
+    // radiator screw channel
+    translate(v = [depth - 7, depth*.7 - .5 - .1, 10]) rotate([-90, 0, 0]) cylinder(h = .5 + .2, d = 6.8 + .15, center = false);
+    translate(v = [depth - 7, depth*.7 - .5 - 2 - .1, 10]) rotate([-90, 0, 0]) cylinder(h = 2 + .2, d = 4.1 + .15, center = false);
+    translate(v = [depth - 7, depth*.7 - 2.5 - 2 - .1, 10]) rotate([-90, 0, 0]) cylinder(h = 2 + .2, d = 5.6 + .15, center = false);
+    translate(v = [depth - 7, -.1, 10]) rotate([-90, 0, 0]) cylinder(h = depth*.7 + .2 - 4.5, d = 7 + .15, center = false);
+
+    // dust filter
+    translate(v = [-.1, depth*.7 - dustfilter_thickness - 4.5, 2]) cube(size = [depth + 4 + .2, dustfilter_thickness, height - 2 + .1], center = false);
 
     // angle
     translate(v = [0, 0, -.1]) linear_extrude(height = height + .2) {
       polygon(points = [
         [-.1, -.1],
-        [depth + .1, 0],
-        [depth + .1, depth * .75 + .1],
+        [depth + 6.5 + .1, 0],
+        [depth + 6.5 + .1, depth * .7 + .1 - thickness*2 - dustfilter_thickness],
       ]);
     }
 
-    // rail
-    translate(v = [-.1, depth * .75 - thickness - dustfilter_thickness, thickness]) 
-      cube(size = [thickness + .2, dustfilter_thickness, height], center = false);
-
-    // radiator screw
-    translate(v = [depth - 7.3, depth * .75 + .1, 4.4]) rotate(a = 90, v = [1, 0, 0])  union() {
-      cylinder(h = .4 + .1, d = 7, center = false);
-      cylinder(h = 2.5 + .1, d = 4.2 + .15, center = false);
-      translate(v = [0, 0, 2.5]) cylinder(h = 5, d = 5.6 + .1, center = false);
-    }
+    // volume cutout
+    translate(v = [thickness, 0, thickness]) 
+      cube(size = [depth + 6.5 + .1, depth*.7 - 6.5 - thickness*2 - 2, height], center = false);
 
     // wood screws
-    translate(v = [thickness, height/2, height/2]) rotate(a = 90, v = [0, 1, 0]) screw(diameter = 3.5, length = 12, cutout_sample = true);
-    translate(v = [thickness, height/2 + depth*.75 - thickness*3 - height, height/2]) rotate(a = 90, v = [0, 1, 0]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+    for (i=[0:1]) 
+      translate(v = [thickness, height/2 + (depth*.7 - thickness*4.5 - height)*i, (height + thickness)/2]) 
+        rotate(a = 90, v = [0, 1, 0]) 
+          screw(diameter = 3.5, length = 12, cutout_sample = true);
   }
 }
 
@@ -242,7 +238,8 @@ module printed_parts(rad_angle) {
   color("#bbbbbb") union() {
     //translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20); // commented due to performance issues
 
-    translate(v = [65, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
+    translate(v = [50, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
+    translate(v = [650, 0, 292]) mirror(v = [1, 0, 0])  rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
 
     translate(v = [125 - 15, -18, 338 + 25]) rotate([90, 90, 0])  pipe_passthrough();
     translate(v = [181 - 15, -18, 230 + 25]) rotate([90, 90, 0])  pipe_passthrough();
