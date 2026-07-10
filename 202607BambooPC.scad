@@ -234,6 +234,51 @@ module slot_support(slots) {
   }
 }
 
+module radiator_mounting_240() {
+  width = 120 + 14*2;
+  difference() {
+    cube(size = [240, width, 2.5], center = false);
+
+    for (i=[0:1]) {
+      translate(v = [5 + (120 - 5 - .1)*i, (width - 95)/2, -.1]) cube(size = [115, 95, 3], center = false);
+      translate(v = [15 + (120 - 5)*i, (width - 110)/2, -.1]) cube(size = [95, 110, 3], center = false);
+
+      // screws: radiator
+      for (j=[0:1]) {
+        translate(v = [10 + 105*i, (width - 105)/2 + 105*j, 2.5]) 
+          screw_metric_countersunk(standard=3, length=3, unthreaded_length=0, borehole_length=5, tolerance=.15);
+        translate(v = [120 + 5 + 105*i, (width - 105)/2 + 105*j, 2.5]) 
+          screw_metric_countersunk(standard=3, length=3, unthreaded_length=0, borehole_length=5, tolerance=.15);
+    
+        translate(v = [7 + (240 - 14)*i, 7 + (width - 14)*j, 0]) mirror(v = [0, 0, 1])   screw(diameter = 3.5, length = 12, cutout_sample = true);
+      }
+    }
+  }
+}
+
+module radiator_filter_slot() {
+  radi_thickness = 40.5;
+  filter_overhang = 2.7;
+
+  slot_width = 15.7 + .15;
+
+  linear_extrude(height = 2) {
+    polygon(points = [
+      [0, 0],
+      [9, 0],
+      [9, 3.5],
+      [8, 3.5],
+      [8, 2],
+      [2, 2],
+      [2, 2 + radi_thickness],
+      [9, 2 + radi_thickness],
+      [9, 2 + radi_thickness - 1.5],
+      [8, 2 + radi_thickness - 1.5],
+      [8, 2 + radi_thickness - 1.5],
+    ]);
+  }
+}
+
 module printed_parts(rad_angle) {
   color("#bbbbbb") union() {
     //translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20); // commented due to performance issues
@@ -251,6 +296,10 @@ module printed_parts(rad_angle) {
     for (i=[0:1]) translate(v = [450 - 14, 0, 100 + 90 + 115*i]) rotate([-90, 0, 0])  ssd_plate();
 
     translate(v = [700 - 316, -18, 100]) rotate([90, 0, 0])  slot_support(slots = 5);
+
+    translate(v = [(700 - 120 - 14*2)/2, 2, 100 + (400 - 240)/2 - 20 + 240]) rotate([90, 90, 0])  radiator_mounting_240();
+
+//    radiator_filter_slot();
   }
 }
 
