@@ -205,32 +205,54 @@ module ssd_plate() {
   }
 }
 
-module slot_support(slots) {
-  slot_width = 39 / 2;
-  slot_height = 114 + 6 + 11;
+module slot_support(slots, height_offset = 0) {
+  io_height = 100;
+
+  slot_width = 0.8 * 25.4;
   slot_screwing_depth = 12;
+
+  distance_io_mobo = 9; // distance between io and mainboard pcb
+  mainboard_standoff_height = 6; // measured standoff height for mainboard
+  slot_height = io_height + distance_io_mobo + mainboard_standoff_height;
 
   material_thickness = 3;
   support_depth = 12;
 
+  module main_body(slots) {
+    difference() {
+      cube(size = [slot_width * slots + material_thickness*2, slot_height, slot_screwing_depth], center = false); // base cube
+
+      translate(v = [material_thickness*2, slot_height - io_height - material_thickness, -.1]) // slot io cutout
+        cube(size = [slot_width * slots - material_thickness*2, io_height, 2 + .2], center = false);
+      
+      translate(v = [material_thickness, material_thickness*1.5, 2]) // volume cutout
+        cube(size = [slot_width * slots, slot_height - material_thickness*2.5, slot_screwing_depth], center = false);
+
+      for (i=[0:slots-1]) // slot screws
+        translate(v = [material_thickness + 4 + slot_width * i, slot_height - material_thickness - .1, 5]) 
+          rotate(a = 90, v = [-1, 0, 0]) cylinder(h = material_thickness + .2, d = 2.7, center = false);
+    }
+  }
+
   difference() {
-    union() {
-      translate(v = [0, 0, 5]) difference() {
-        cube(size = [slot_width * slots + material_thickness*2, support_depth + material_thickness, slot_height], center = false);
-        translate(v = [material_thickness, -.1, material_thickness]) 
-          cube(size = [slot_width * slots, support_depth + 1 + .1, slot_height - material_thickness * 2], center = false);
+    if (height_offset <= 0) {
+        main_body(slots = slots);
+    } else {
+      difference() {
+        union() {
+          translate(v = [0, height_offset - mainboard_standoff_height, 0]) main_body(slots = slots);
+          cube(size = [slot_width * slots + material_thickness*2, height_offset - mainboard_standoff_height + .1, slot_screwing_depth], center = false); // height_offset
+        }
 
-        translate(v = [material_thickness + 3, support_depth + 1 - .1, slot_height - 105 - material_thickness]) 
-          cube(size = [slot_width * slots - material_thickness*2, 2 + .2, 105], center = false);
-
-        for (i=[0:slots-1])
-          translate(v = [material_thickness*2 + slot_width * i, 17 - slot_screwing_depth/2, slot_height - material_thickness - .1]) 
-            cylinder(h = 3 + .2, d = 2.7, center = false);
+        translate(v = [material_thickness, material_thickness*1.5, 2]) // volume cutout
+          cube(size = [slot_width * slots, height_offset, slot_screwing_depth], center = false);
       }
-      cube(size = [slot_width * slots + material_thickness*2, support_depth + material_thickness, 5 + .1], center = false);    
     }
 
-    for (i=[0:slots-1 - 1]) translate(v = [material_thickness + (slot_width * slots) / slots * (i+1), support_depth/2, 5]) screw(diameter = 3.5, length = 35, cutout_sample = true);
+    for (i=[0:2]) 
+      translate(v = [material_thickness + 7 + (slot_width * slots - 14)/2 * i, material_thickness*1.5, 7]) 
+        rotate(a = 90, v = [-1, 0, 0]) 
+          screw(diameter = 3.5, length = 35, cutout_sample = true);
   }
 }
 
@@ -281,7 +303,11 @@ module radiator_filter_slot() {
 
 module printed_parts(rad_angle) {
   color("#bbbbbb") union() {
-    //translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90]) mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=20); // commented due to performance issues
+
+    mainboard_standoffs = 20;
+    if (!$preview)  // preview performance fix
+      translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90])
+        mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=mainboard_standoffs);
 
     translate(v = [50, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
     translate(v = [650, 0, 292]) mirror(v = [1, 0, 0])  rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
@@ -295,9 +321,9 @@ module printed_parts(rad_angle) {
 
     for (i=[0:1]) translate(v = [450 - 14, 0, 100 + 90 + 115*i]) rotate([-90, 0, 0])  ssd_plate();
 
-    translate(v = [700 - 316, -18, 100]) rotate([90, 0, 0])  slot_support(slots = 5);
-
     translate(v = [(700 - 120 - 14*2)/2, 2, 100 + (400 - 240)/2 - 20 + 240]) rotate([90, 90, 0]) radiator_mounting_240();
+
+    translate(v = [700 - 316, -18, 100 + 12]) rotate([0, 180, 180])  slot_support(slots = 4, height_offset = mainboard_standoffs);
 
 //    radiator_filter_slot();
   }
