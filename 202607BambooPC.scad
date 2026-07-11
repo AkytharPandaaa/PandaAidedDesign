@@ -81,8 +81,8 @@ module io() {
 
 // ===================================================================================
 
-module radiator_angle(depth, thickness = 3) {
-  fins_to_case_offset = 4.2;
+module radiator_angle(depth, thickness = 2.5) {
+  fins_to_case_offset = 3.6;
   dustfilter_thickness = 7 + .15;
   height = 14;
 
@@ -121,6 +121,14 @@ module radiator_angle(depth, thickness = 3) {
       translate(v = [thickness, height/2 + (depth*.7 - thickness*4.5 - height)*i, (height + thickness)/2]) 
         rotate(a = 90, v = [0, 1, 0]) 
           screw(diameter = 3.5, length = 12, cutout_sample = true);
+  }
+}
+
+module radiator_angle_simple(depth, thickness=2.5) {
+  dustfilter_thickness = 7 + .15;
+  difference() {
+    radiator_angle(depth = depth, thickness = thickness);
+    translate(v = [-.1, -.1, -.1]) cube(size = [100, depth*.7 - dustfilter_thickness - 3.5 - thickness, 100], center = false);
   }
 }
 
@@ -326,7 +334,9 @@ module printed_parts(rad_angle) {
         mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=mainboard_standoffs);
 
     translate(v = [50, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
+    translate(v = [310, 0, 415]) rotate([90 - rad_angle, 0, 90]) mirror(v = [0, 0, 1]) radiator_angle_simple(depth = 62);
     translate(v = [700 - 50, 0, 292]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
+    translate(v = [700 - 310, 0, 415]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) mirror(v = [0, 0, 1]) radiator_angle_simple(depth = 62);
 
     translate(v = [125 - 15, -18, 338 + 25]) rotate([90, 90, 0]) pipe_passthrough();
     translate(v = [181 - 15, -18, 230 + 25]) rotate([90, 90, 0]) pipe_passthrough();
