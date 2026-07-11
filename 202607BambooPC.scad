@@ -280,9 +280,10 @@ module radiator_mounting_240() {
 
 module radiator_filter_slot() {
   material_thickness = 2.5;
+  mat_thin = 1.5;
 
   radi_thickness = 40.3 + .15;
-  radi_case_depth = 7.6 + .15;
+  radi_case_depth = 7.6;
   filter_overhang = 4;
   filter_thickness = 7.1 + .15;
   filter_slot_depth = 4;
@@ -293,9 +294,9 @@ module radiator_filter_slot() {
 
   difference() {
     union() {
-      cube(size = [material_thickness*2 + radi_case_depth, material_thickness*2 + radi_thickness, width], center = false);
+      cube(size = [material_thickness + mat_thin + radi_case_depth, material_thickness + mat_thin + radi_thickness, width], center = false);
       translate(v = [-(filter_overhang + filter_slot_depth), material_thickness + radi_thickness, 0]) 
-        cube(size = [material_thickness*2 + radi_case_depth + filter_slot_depth + filter_overhang, filter_slot_thickness + material_thickness*2, width], center = false);
+        cube(size = [material_thickness + mat_thin + radi_case_depth + filter_slot_depth + filter_overhang, filter_slot_thickness + material_thickness + mat_thin, width], center = false);
     }
 
     translate(v = [0, 0, -.1]) {
@@ -305,7 +306,7 @@ module radiator_filter_slot() {
       translate(v = [-filter_overhang - filter_slot_depth - .1, material_thickness*2 + radi_thickness, material_thickness*2]) // filter slot
         cube(size = [100, filter_slot_thickness, filter_slot_width], center = false);
 
-      translate(v = [material_thickness, material_thickness, 0]) // radiator case
+      translate(v = [1.5, material_thickness, 0]) // radiator case
         cube(size = [radi_case_depth, radi_thickness, width + .2], center = false); 
 
       translate(v = [material_thickness, material_thickness*2, 0]) // radiator clamping
@@ -324,26 +325,26 @@ module printed_parts(rad_angle) {
       translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90])
         mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=mainboard_standoffs);
 
-    translate(v = [50, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
-    translate(v = [700 - 50, 0, 292]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
+//    translate(v = [50, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
+//    translate(v = [700 - 50, 0, 292]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
+//
+//    translate(v = [125 - 15, -18, 338 + 25]) rotate([90, 90, 0]) pipe_passthrough();
+//    translate(v = [181 - 15, -18, 230 + 25]) rotate([90, 90, 0]) pipe_passthrough();
+//
+//    translate(v = [125 - 30, -18 - 70, 130 - 3.5]) pump_bracket();
+//
+//    translate(v = [534, -18, 100 + 16]) psu_brackets();
+//
+//    for (i=[0:1]) translate(v = [450 - 14, 0, 100 + 90 + 115*i]) rotate([-90, 0, 0]) ssd_plate();
+//
+//    translate(v = [(700 - 120 - 14*2)/2, 2, 100 + (400 - 240)/2 - 20 + 240]) rotate([90, 90, 0]) radiator_mounting_240();
+//
+//    translate(v = [700 - 316, -18, 100 + 12]) rotate([0, 180, 180]) slot_support(slots = 4, height_offset = mainboard_standoffs);
 
-    translate(v = [125 - 15, -18, 338 + 25]) rotate([90, 90, 0]) pipe_passthrough();
-    translate(v = [181 - 15, -18, 230 + 25]) rotate([90, 90, 0]) pipe_passthrough();
-
-    translate(v = [125 - 30, -18 - 70, 130 - 3.5]) pump_bracket();
-
-    translate(v = [534, -18, 100 + 16]) psu_brackets();
-
-    for (i=[0:1]) translate(v = [450 - 14, 0, 100 + 90 + 115*i]) rotate([-90, 0, 0]) ssd_plate();
-
-    translate(v = [(700 - 120 - 14*2)/2, 2, 100 + (400 - 240)/2 - 20 + 240]) rotate([90, 90, 0]) radiator_mounting_240();
-
-    translate(v = [700 - 316, -18, 100 + 12]) rotate([0, 180, 180]) slot_support(slots = 4, height_offset = mainboard_standoffs);
-
-    translate(v = [75, 80, 100 + 300]) rotate([-90 + rad_angle, 0, -90]) radiator_filter_slot();
-    translate(v = [200, 80, 100 + 360]) rotate([-90 + rad_angle, 0, -90]) radiator_filter_slot();
-    translate(v = [700 - 75, 80, 100 + 300]) mirror(v = [1, 0, 0]) rotate([-90 + rad_angle, 0, -90]) radiator_filter_slot();
-    translate(v = [700 - 200, 80, 100 + 360]) mirror(v = [1, 0, 0]) rotate([-90 + rad_angle, 0, -90]) radiator_filter_slot();
+    translate(v = [75, 80, 100 + 300]) rotate([-90 + rad_angle, 0, -90]); radiator_filter_slot();
+//    translate(v = [200, 80, 100 + 360]) rotate([-90 + rad_angle, 0, -90]) radiator_filter_slot();
+//    translate(v = [700 - 75, 80, 100 + 300]) mirror(v = [1, 0, 0]) rotate([-90 + rad_angle, 0, -90]) radiator_filter_slot();
+//    translate(v = [700 - 200, 80, 100 + 360]) mirror(v = [1, 0, 0]) rotate([-90 + rad_angle, 0, -90]) radiator_filter_slot();
   }
 }
 
