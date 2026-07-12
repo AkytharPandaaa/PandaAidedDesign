@@ -91,7 +91,7 @@ module radiator_angle(depth, thickness = 2.5) {
       cube(size = [depth + 4 + 2.5, depth * 0.7, height], center = false);
 
       // fin support
-      translate(v = [0, depth * .7, 3]) cube(size = [depth - 11.5, fins_to_case_offset + .1, height - 3], center = false);
+      translate(v = [0, depth * .7, 3]) cube(size = [depth - (11.5 + 3.6), fins_to_case_offset + .1, height - 3], center = false);
     }
 
     // radiator screw channel
