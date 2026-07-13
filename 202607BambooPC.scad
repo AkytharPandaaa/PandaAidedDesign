@@ -333,10 +333,10 @@ module printed_parts(rad_angle) {
       translate(v = [(700 - 244)/2, -18, 100 + 15]) rotate([0, -90, 90])
         mainboard_support_grid(mainboard=[0, 1, 2, 4, 5, 6, 7, 9, 10], standoff_height=mainboard_standoffs);
 
-    translate(v = [50, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
-    translate(v = [310, 0, 415]) rotate([90 - rad_angle, 0, 90]) mirror(v = [0, 0, 1]) radiator_angle_simple(depth = 62);
-    translate(v = [700 - 50, 0, 292]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 62);
-    translate(v = [700 - 310, 0, 415]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) mirror(v = [0, 0, 1]) radiator_angle_simple(depth = 62);
+    translate(v = [50, 0, 292]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 61);
+    translate(v = [310, 0, 415]) rotate([90 - rad_angle, 0, 90]) mirror(v = [0, 0, 1]) radiator_angle_simple(depth = 61);
+    translate(v = [700 - 50, 0, 292]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) radiator_angle(depth = 64);
+    translate(v = [700 - 310, 0, 415]) mirror(v = [1, 0, 0]) rotate([90 - rad_angle, 0, 90]) mirror(v = [0, 0, 1]) radiator_angle_simple(depth = 59);
 
     translate(v = [125 - 15, -18, 338 + 25]) rotate([90, 90, 0]) pipe_passthrough();
     translate(v = [181 - 15, -18, 230 + 25]) rotate([90, 90, 0]) pipe_passthrough();
