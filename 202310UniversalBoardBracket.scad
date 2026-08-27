@@ -149,9 +149,21 @@ module shower_backet() {
 
 }
 
+module timmerflotte_mount(board_thickness = 20.8) {
+  difference() {
+    vertical_mount(width = 25, height = 60, board_thickness = board_thickness);
+
+    translate(v = [12.5,-2.5,50]) rotate(a = 90, v = [1,0,0]) 
+    screw(diameter = 2.7, length = 8, cutout_sample = false);
+  }
+}
+
 // translate([ 10, 0, 0 ]) top_mount();
 // translate([ 40, 0, 0 ]) vertical_mount(width=28.5, height=58.5);
 // bottle_holder(25);
 // rodret_mount();
-//for (i=[0:1]) {mirror([i,0,0]) translate(v=[5*i,0,0]) fan_holder(board_height=155);}
-shower_backet();
+// for (i=[0:1]) {mirror([i,0,0]) translate(v=[5*i,0,0]) fan_holder(board_height=155);}
+// shower_backet();
+
+timmerflotte_mount(board_thickness = 20.8);
+translate(v = [30, 0,0]) timmerflotte_mount(board_thickness = 4.2);
