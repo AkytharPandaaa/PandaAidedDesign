@@ -20,4 +20,5 @@ module side_mount(cable_od, board_thickness, width = 7) {
   }
 }
 
-side_mount(cable_od=8.2, board_thickness=11.8);
+//side_mount(cable_od=8.2, board_thickness=11.8);
+side_mount(cable_od=3.9, board_thickness=17.5);
