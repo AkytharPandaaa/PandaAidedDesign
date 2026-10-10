@@ -20,7 +20,7 @@ module split_with_screw_support(screw_standard, screw_count, material_thickness,
   translate(v=[-1.5, 0, support_height / 2]) cube(size=[support_width + 7, material_width, support_height], center=true);
 }
 
-module split_with_screw(screw_standard, screw_count, material_thickness, material_width, cut_thickness = .1) {
+module split_with_screw(screw_standard, screw_count, material_thickness, material_width, cut_thickness = .1, debug_mode = false) {
   sts_distance = split_screw_distance(screw_standard); // sts = screw to screw
 
   width = split_width(screw_standard, screw_count);
@@ -32,7 +32,9 @@ module split_with_screw(screw_standard, screw_count, material_thickness, materia
   screw_length_unthreaded = height - bottom_split_height - screw_metric_countersunk_height(screw_standard);
   screw_pos_first = -(width - .2) / 2 + sts_distance / 2;
 
-  echo("SplitToPrint: material height", height);
+  if (debug_mode) {
+    echo("SplitToPrint: material height", height);
+  }
 
   translate(v=[0, 0, bottom_split_height]) {
     union() {
@@ -52,4 +54,4 @@ module split_with_screw(screw_standard, screw_count, material_thickness, materia
   }
 }
 
-split_with_screw(screw_standard=3, screw_count=1, material_thickness=3, material_width=7, cut_thickness=.1);
+split_with_screw(screw_standard=3, screw_count=1, material_thickness=3, material_width=7, cut_thickness=.1, debug_mode = true);

@@ -120,7 +120,7 @@ module screw_corehole(diameter_screw, diameter_core, unthreaded_length, length =
   }
 }
 
-module screw_with_nut(screw_length, diameter, square_channel = false, tolerance = .1) {
+module screw_with_nut_metric(screw_length, diameter, square_channel = false, tolerance = .1) {
   function od(width) = ( (width / 2) / cos(30)) * 2; // calculates nut diameter from given width
   nut_thickness = [0.8, 1.6, 2.4, 3.2, 4, 5, 5.5, 6.5];
   nut_width = [2.5, 4, 5.5, 7.1, 8.1, 10.1, 11.1, 13.1];
