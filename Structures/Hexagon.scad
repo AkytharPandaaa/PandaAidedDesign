@@ -101,3 +101,34 @@ difference() {
   //translate([(width - hexagon_get_used_width(width)) / 2, (depth - hexagon_get_used_depth(depth)) / 2, 0])
     __hex_pattern(width, depth, 3);
 }
+
+module hex_structure(inner_diameter, thickness, horizontal_count, vertical_count, height, screw_mounting_thickness = 2.5, bottom_floor = 1) {
+  module hex_pattern(diameter, distance, height=2, h_count=5, v_count=4) {
+    od = diameter;
+    id = (cos(30) * (diameter/2))*2;
+    h_offset = id + distance;
+    v_offset = cos(30)*h_offset;
+    for (v=[0:v_count-1]) {
+      for (h=[0:h_count-1]) {
+        if (!(v%2==1 && h==h_count-1))
+          translate(v = [h_offset*h + (h_offset/2*(v%2)), v_offset*v, 0]) 
+            rotate(a = 30, v = [0, 0, 1]) 
+              cylinder(h = height, r = diameter/2, center = false, $fn=6);
+      }
+    }
+  }
+
+  difference() {
+    outer_diameter = inner_diameter + thickness * 2;
+    outer_distance = -.7 * thickness;
+    horizontal_width = (cos(30) * (outer_diameter/2))*2*horizontal_count + outer_distance*(horizontal_count-1);
+    vertical_depth = cos(30)*((cos(30) * (inner_diameter/2))*2 + thickness) * (vertical_count-1);
+    union() {
+      if (screw_mounting_thickness > 0)
+        translate(v = [-(cos(30)*outer_diameter/2), 0, 0]) cube(size = [horizontal_width, vertical_depth, screw_mounting_thickness], center = false);
+      hex_pattern(diameter=outer_diameter, distance=outer_distance, height=height, h_count=horizontal_count, v_count=vertical_count);
+    }
+    translate(v = [0, 0, bottom_floor > 0 ? bottom_floor : -.1]) 
+      hex_pattern(diameter=inner_diameter, distance=thickness, height=height + .2, h_count=horizontal_count, v_count=vertical_count);
+  }
+}
