@@ -61,7 +61,9 @@ module nut_plate() {
 }
 
 module iron_tip_storage() {
-  inner_diameter = 8.5 + .2;
+  // circular inner diameter given, calculating diameter for the edges
+  inner_diameter = hex_structure_inner_diameter_edges(8.5 + .2);
+
   thickness = .7;
   vertical_offset = hex_structure_vertical_offset(inner_diameter, thickness);
 
@@ -81,5 +83,4 @@ module iron_tip_storage() {
   }
 }
 
-
-//iron_tip_storage();
+iron_tip_storage();
