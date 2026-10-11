@@ -102,6 +102,8 @@ difference() {
     __hex_pattern(width, depth, 3);
 }
 
+function hex_structure_vertical_offset(inner_diameter, distance) = (cos(30)*((cos(30)*(inner_diameter/2)*2)) + distance);
+
 module hex_structure(inner_diameter, thickness, horizontal_count, vertical_count, height, screw_mounting_thickness = 2.5, bottom_floor = 1) {
   module hex_pattern(diameter, distance, height=2, h_count=5, v_count=4) {
     od = diameter;
@@ -122,7 +124,7 @@ module hex_structure(inner_diameter, thickness, horizontal_count, vertical_count
     outer_diameter = inner_diameter + thickness * 2;
     outer_distance = -.7 * thickness;
     horizontal_width = (cos(30) * (outer_diameter/2))*2*horizontal_count + outer_distance*(horizontal_count-1);
-    vertical_depth = cos(30)*((cos(30) * (inner_diameter/2))*2 + thickness) * (vertical_count-1);
+    vertical_depth = hex_structure_vertical_offset(inner_diameter, thickness) * (vertical_count-1);
     union() {
       if (screw_mounting_thickness > 0)
         translate(v = [-(cos(30)*outer_diameter/2), 0, 0]) cube(size = [horizontal_width, vertical_depth, screw_mounting_thickness], center = false);
