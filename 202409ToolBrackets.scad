@@ -66,20 +66,21 @@ module iron_tip_storage() {
 
   thickness = .7;
   vertical_offset = hex_structure_vertical_offset(inner_diameter, thickness);
+  horizontal_count = 3;
 
   difference() {
     union() {
-      hex_structure(inner_diameter, thickness, horizontal_count = 5, vertical_count = 3, height = 15, screw_mounting_thickness = 4, bottom_floor = .6);
+      hex_structure(inner_diameter, thickness, horizontal_count = horizontal_count, vertical_count = 3, height = 15, screw_mounting_thickness = 4, bottom_floor = .6);
 
       for (i=[0:1]) {
-        translate(v = [-5 + i*(hex_structure_width(inner_diameter, 5, thickness)+1), vertical_offset, 0]) mirror(v = [i, 0, 0])  difference() {
+        translate(v = [-5 + i*(hex_structure_width(inner_diameter, horizontal_count, thickness)+1), vertical_offset, 0]) mirror(v = [i, 0, 0])  difference() {
           cylinder(h = 4, r = 5, center = false);
           translate(v = [1, -10, -.1]) cube(size = 20, center = false);
         }
       }
     }
     translate(v=[-5, vertical_offset, 4]) screw(diameter=3.5, length=12, cutout_sample=true);
-    translate(v=[-5 + (hex_structure_width(inner_diameter, 5, thickness)+1), vertical_offset, 4]) screw(diameter=3.5, length=12, cutout_sample=true);
+    translate(v=[-5 + (hex_structure_width(inner_diameter, horizontal_count, thickness)+1), vertical_offset, 4]) screw(diameter=3.5, length=12, cutout_sample=true);
   }
 }
 
