@@ -1,6 +1,8 @@
 // created by IndiePandaaaa
 // encoding: utf-8
 use <Variables/Threading.scad>
+use <Structures/Hexagon.scad>
+use <Parts/Screw.scad>
 
 CHAMFER = .5;
 TOLERANCE = .2;
@@ -57,5 +59,27 @@ module nut_plate() {
     }
   }
 }
-//mounting_base(inner_width, inner_height, inner_height_offset, base_depth, round_cutout = false) 
 
+module iron_tip_storage() {
+  inner_diameter = 8.5 + .2;
+  thickness = .7;
+  vertical_offset = hex_structure_vertical_offset(inner_diameter, thickness);
+
+  difference() {
+    union() {
+      hex_structure(inner_diameter, thickness, horizontal_count = 5, vertical_count = 3, height = 15, screw_mounting_thickness = 4, bottom_floor = .6);
+
+      for (i=[0:1]) {
+        translate(v = [-5 + i*(hex_structure_width(inner_diameter, 5, thickness)+1), vertical_offset, 0]) mirror(v = [i, 0, 0])  difference() {
+          cylinder(h = 4, r = 5, center = false);
+          translate(v = [1, -10, -.1]) cube(size = 20, center = false);
+        }
+      }
+    }
+    translate(v=[-5, vertical_offset, 4]) screw(diameter=3.5, length=12, cutout_sample=true);
+    translate(v=[-5 + (hex_structure_width(inner_diameter, 5, thickness)+1), vertical_offset, 4]) screw(diameter=3.5, length=12, cutout_sample=true);
+  }
+}
+
+
+//iron_tip_storage();
