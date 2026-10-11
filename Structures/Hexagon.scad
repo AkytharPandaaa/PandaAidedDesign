@@ -106,6 +106,7 @@ function hex_structure_horizontal_offset(inner_diameter, distance) = ((cos(30)*(
 function hex_structure_vertical_offset(inner_diameter, distance) = cos(30) * hex_structure_horizontal_offset(inner_diameter, distance);
 function hex_structure_outer_diameter(inner_diameter, distance) = inner_diameter + distance * 2;
 function hex_structure_outer_distance(distance) = -.7 * distance;
+function hex_structure_inner_diameter_edges(inner_diameter) = ((inner_diameter/2)/cos(30))*2;
 
 function hex_structure_width(inner_diameter, horizontal_count, distance) = (cos(30) * (hex_structure_outer_diameter(inner_diameter, distance)/2))*2 * horizontal_count + hex_structure_outer_distance(distance) * (horizontal_count-1);
 
