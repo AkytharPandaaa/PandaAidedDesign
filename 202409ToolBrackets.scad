@@ -92,8 +92,8 @@ module soldering_iron_bracket() {
       cube(size = bracket_size, center = false);
       translate(v = [-.7, bracket_size[1]/2, bracket_size[2]]) rotate(a = 85, v = [0,1,0])  cylinder(h = 25, d1 = 15.3, d2=16.5, center = false);
 
-      translate(v = [bracket_size[0]/2-2.4, -.1, 11.5]) cube(size = [4.8, bracket_size[1]+.2, 1.5], center = false);
-      translate(v = [bracket_size[0]/2-5.9, -.1, 9]) cube(size = [11.8, bracket_size[1]+.2, 1.5], center = false);
+      translate(v = [bracket_size[0]/2-5.9, -.1, 10.5]) cube(size = [11.8, bracket_size[1]+.2, 1.5], center = false);
+      translate(v = [bracket_size[0]/2-2.4, -.1, 8]) cube(size = [4.8, bracket_size[1]+.2, 1.5], center = false);
     }
     difference() {
       union() {
