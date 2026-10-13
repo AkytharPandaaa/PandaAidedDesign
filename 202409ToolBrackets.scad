@@ -6,7 +6,7 @@ use <Parts/Screw.scad>
 
 CHAMFER = .5;
 TOLERANCE = .2;
-$fn = 75;
+$fn = $preview ? 25:125;
 
 module mounting_base(inner_width, inner_height, inner_height_offset, base_depth, material_thickness = 3, round_cutout =
 false) {
@@ -84,4 +84,32 @@ module iron_tip_storage() {
   }
 }
 
-iron_tip_storage();
+module soldering_iron_bracket() {
+  bracket_size = [24, 20, 20];
+
+  union() {
+    difference() {
+      cube(size = bracket_size, center = false);
+      translate(v = [-.7, bracket_size[1]/2, bracket_size[2]]) rotate(a = 85, v = [0,1,0])  cylinder(h = 25, d1 = 15.3, d2=16.5, center = false);
+
+      translate(v = [bracket_size[0]/2-2.4, -.1, 11.5]) cube(size = [4.8, bracket_size[1]+.2, 1.5], center = false);
+      translate(v = [bracket_size[0]/2-5.9, -.1, 9]) cube(size = [11.8, bracket_size[1]+.2, 1.5], center = false);
+    }
+    difference() {
+      union() {
+        translate(v = [0, -5, 0]) cube(size = [10, bracket_size[1]+10, 4], center = false);
+        for (i=[0:1]) {
+          translate(v = [5, -5+i*(bracket_size[1]+10)]) 
+            cylinder(h = 4, r = 5, center = false);
+        }
+      }
+      for (i=[0:1]) {
+        translate(v=[5, -5+i*(bracket_size[1]+10), 4]) 
+          screw(diameter=3.5, length=12, cutout_sample=true);
+      }
+    }
+  }
+}
+
+//iron_tip_storage();
+soldering_iron_bracket();
