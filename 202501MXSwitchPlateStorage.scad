@@ -63,5 +63,5 @@ module switch_plate(width, depth, switch_count, border = 2, with_bottom = false,
 }
 
 // FIX: add plate without rounded edges to connect switch plates with more than 1 switch.
-switch_plate(width=210, depth=145, switch_count=12);
+switch_plate(width=210, depth=145, switch_count=48);
 //switch_plate(width=30, depth=30, switch_count=1, border=0, with_bottom=true, rounded_edges=.5);
