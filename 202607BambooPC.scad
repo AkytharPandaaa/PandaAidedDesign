@@ -410,16 +410,18 @@ module tubes() {
 
 // ===================================================================================
 
-translate(v = [-350 * 0, 0, 0]) {
-  rad_angle = 25;
+module bamboo_pc() {
+  translate(v = [-350 * 0, 0, 0]) {
+    rad_angle = 25;
 
-  //translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
+    //translate(v = [100, -100, 0]) rotate(a = 90, v = [1, 0, 0]) steckerleiste(plugs = 6);
 
-  translate(v = [0, 0, 100]) board(thickness = 18, rad_angle = rad_angle);
-  translate(v = [0, 0, 100]) components(atx = false, rad_angle = rad_angle);
+    translate(v = [0, 0, 100]) board(thickness = 18, rad_angle = rad_angle);
+    translate(v = [0, 0, 100]) components(atx = false, rad_angle = rad_angle);
 
-  tubes();
-  
-  printed_parts(rad_angle = rad_angle);
+    tubes();
+    
+    printed_parts(rad_angle = rad_angle);
+  }
 }
-
+bamboo_pc();
