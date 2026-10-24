@@ -49,8 +49,8 @@ color(c = "blue", alpha = 1.0) {
 
 // moni support
 color(c = "#cc0000", alpha = 1.0) {
-  translate(v = [0, 420-22, 24]) cube(size = [24, 44, 650-24], center = false);
-  translate(v = [300-22, 800-24, 24]) cube(size = [44, 24, 650-24], center = false);
+  translate(v = [0, 520-22, 24]) cube(size = [24, 44, 650-24], center = false);
+  translate(v = [360-22, 800-24, 24]) cube(size = [44, 24, 650-24], center = false);
 
   translate(v = [650-22, 800-24, 24]) cube(size = [44, 24, 1000-24], center = false);
   translate(v = [750-22, 800-24, 24]) cube(size = [44, 24, 1000-24], center = false);
