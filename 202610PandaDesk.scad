@@ -29,21 +29,21 @@ translate(v = [1756, 0, 0]) cube(size = [44, 756, 24], center = false);
 // senkrechte
 color(c = "#dd7700", alpha = 1.0) {
   translate(v = [0, 100-22, 24]) cube(size = [24, 44, 650-24], center = false);
-  translate(v = [0, 700-22, 24]) cube(size = [24, 44, 650-24], center = false);
+  //translate(v = [0, 700-22, 24]) cube(size = [24, 44, 650-24], center = false);
 
-  translate(v = [100-22, 800-24, 24]) cube(size = [44, 24, 650-24], center = false);
+  //translate(v = [100-22, 800-24, 24]) cube(size = [44, 24, 650-24], center = false);
 
   translate(v = [1150-22, 800-24, 24]) cube(size = [44, 24, 400], center = false);
-  translate(v = [1300-22, 800-24, 24]) cube(size = [44, 24, 400], center = false);
-  translate(v = [1550-22, 800-24, 24]) cube(size = [44, 24, 400], center = false);
+//  translate(v = [1300-22, 800-24, 24]) cube(size = [44, 24, 400], center = false);
+//  translate(v = [1550-22, 800-24, 24]) cube(size = [44, 24, 400], center = false);
   translate(v = [1700-22, 800-24, 24]) cube(size = [44, 24, 400], center = false);
   translate(v = [1150-22, 800-100-44, 0]) cube(size = [44, 100, 24], center = false);
-  translate(v = [1300-22, 800-100-44, 0]) cube(size = [44, 100, 24], center = false);
-  translate(v = [1550-22, 800-100-44, 0]) cube(size = [44, 100, 24], center = false);
+//  translate(v = [1300-22, 800-100-44, 0]) cube(size = [44, 100, 24], center = false);
+//  translate(v = [1550-22, 800-100-44, 0]) cube(size = [44, 100, 24], center = false);
   translate(v = [1700-22, 800-100-44, 0]) cube(size = [44, 100, 24], center = false);
   translate(v = [1150-22, 800-120, 0]) rotate([45,0,0])  cube(size = [44, 160, 24], center = false);
-  translate(v = [1300-22, 800-120, 0]) rotate([45,0,0])  cube(size = [44, 160, 24], center = false);
-  translate(v = [1550-22, 800-120, 0]) rotate([45,0,0])  cube(size = [44, 160, 24], center = false);
+//  translate(v = [1300-22, 800-120, 0]) rotate([45,0,0])  cube(size = [44, 160, 24], center = false);
+//  translate(v = [1550-22, 800-120, 0]) rotate([45,0,0])  cube(size = [44, 160, 24], center = false);
   translate(v = [1700-22, 800-120, 0]) rotate([45,0,0])  cube(size = [44, 160, 24], center = false);
 
   translate(v = [1800-24, 0, 24]) cube(size = [24, 44, 400], center = false);
@@ -55,8 +55,9 @@ color(c = "blue", alpha = 1.0) {
 
   translate(v = [0, 100+22, 24+550]) cube(size = [24, 420-44, 44], center = false);
 
-  translate(v = [0, 520+22, 24+400]) cube(size = [24, 280-22, 44], center = false);
-  translate(v = [0, 800-24, 24+400]) cube(size = [650-22, 24, 44], center = false);
+  //translate(v = [0, 520+22, 24+400]) cube(size = [24, 280-22, 44], center = false);
+  //translate(v = [0, 800-24, 24+400]) cube(size = [650-22, 24, 44], center = false);
+  translate(v = [400, 800-24, 24+400]) cube(size = [250, 24, 44], center = false);
   translate(v = [750+22, 800-24, 24+400]) cube(size = [1800-750-22, 24, 44], center = false);
 }
 
@@ -78,4 +79,4 @@ color(c = "#cc0000", alpha = 1.0) {
   for (i=[0:6]) translate(v = [650-22+44, 800-24, 24+50+i*140]) cube(size = [100-44, 24, 44], center = false);
 }
 
-//decoration();
+decoration();
