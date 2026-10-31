@@ -338,5 +338,27 @@ module vacuum_adapter(vacuum_diameter) {
   }
 }
 
-//translate([0, 150, 0]) workpiece_stop();
+module saw_insert_adjustment() {
+  module washer(id, od, height) {
+    difference() {
+      cylinder(h = height, d = od, center = false);
+      translate(v = [0,0,-.1]) cylinder(h = height+.2, d = id, center = false);
+    }
+  }
+
+  module square_washer(height) {
+    union() {
+      cube(size = [10, 4, height], center = false);
+      translate(v = [10-4, 3.5, -7.5+height]) cube(size = [4, 1, 7.5], center = false);
+    }
+  }
+
+  translate(v = [10, 0, 0]) washer(4,9.6,.6);
+  translate(v = [20, 0, 0]) square_washer(.6);
+  translate(v = [10, 10, 0]) washer(4,9.6,.4);
+  translate(v = [20, 10, 0]) square_washer(.4);
+}
+
+translate([0, 150, 0]) workpiece_stop();
 vacuum_adapter(VACUUM_OD);
+translate(v = [0, 200, 0]) saw_insert_adjustment();
