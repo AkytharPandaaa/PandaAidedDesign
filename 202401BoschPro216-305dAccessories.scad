@@ -353,12 +353,12 @@ module saw_insert_adjustment() {
     }
   }
 
-  translate(v = [10, 0, 0]) washer(4,9.6,.6);
+  translate(v = [10, 0, 0]) washer(4.2,9.6,.6);
   translate(v = [20, 0, 0]) square_washer(.6);
-  translate(v = [10, 10, 0]) washer(4,9.6,.4);
+  translate(v = [10, 10, 0]) washer(4.2,9.6,.4);
   translate(v = [20, 10, 0]) square_washer(.4);
 }
 
-translate([0, 150, 0]) workpiece_stop();
-vacuum_adapter(VACUUM_OD);
-translate(v = [0, 200, 0]) saw_insert_adjustment();
+//translate([0, 150, 0]) workpiece_stop();
+//vacuum_adapter(VACUUM_OD);
+translate(v = [0, 200, 0]); saw_insert_adjustment();
