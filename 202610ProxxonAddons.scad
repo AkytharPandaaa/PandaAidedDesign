@@ -21,6 +21,11 @@ module mb200_rightangle() {
     }
     translate(v = [88.2+(17.6)/2, 21.5/2, -2.5]) cylinder(h = 15, d = 5.5, center = false);
     translate(v = [88.2+(17.6)/2, 21.5/2, 9-4.3]) cylinder(h = 9-4.3, d = 22.5, center = false);
+
+    // M3 mounting holes for accessories
+    for (i=[0:1]) {
+      translate(v = [15 + 60*i, 21.5/2, -.1]) cylinder(h = 9.2, d = 2.7, center = false);
+    }
   }
 }
 
