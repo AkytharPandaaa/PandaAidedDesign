@@ -1,6 +1,7 @@
 // created by AkytharPandaaa
 
 use <202607BambooPC.scad>
+use <Parts/Screw.scad>
 
 $fn = $preview? 25 : 125;
 
@@ -125,7 +126,53 @@ module angled_connector(angle, height, width, depth, thickness = 3, tolerance = 
   }
 }
 
-//angled_connector(angle = 35, height = 44, width = 24, depth = 30, thickness = 3);
+module pc_socket(angle) {
+  module rounded_corner(radius, height, rotation=0) {
+    translate(v = [radius/2, radius/2, -.1]) 
+    rotate(a = 90*(rotation%4), v = [0, 0, 1]) 
+      translate(v = [radius/2, radius/2, 0]) difference() {
+        rotate(a = 180, v = [0, 0, 1]) cube(size = [radius+.1, radius+.1, height+.2], center = false);
+        translate(v = [0, 0, -.1]) cylinder(h = height+.4, r = radius, center = false);
+      }    
+  }
+  module base(size2d, thickness=4) {
+    screw_edge_distance = 7;
+    difference() {
+      cube(size = [size2d[0], size2d[1], thickness], center = false);
 
-desk();
-decoration();
+      // screws
+      translate(v = [size2d[0]/2, screw_edge_distance, thickness]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+      for (i=[0:1])
+        translate(v = [screw_edge_distance+(size2d[0]-screw_edge_distance*2)*i, size2d[1]-screw_edge_distance, thickness])
+          screw(diameter = 3.5, length = 12, cutout_sample = true);
+
+      // rounded corners
+      radius=screw_edge_distance;
+      for (x=[0:1]) 
+        for (y=[0:1])
+          translate(v = [(size2d[0]-radius)*x, (size2d[1]-radius)*y, 0])
+            rounded_corner(radius=radius, height=4, rotation= x==0&&y==1? 3:y+x);
+    }    
+  }
+  module socket(board, lower, higher, width) { // params = thicknesses
+    difference() {
+      cube(size = [lower+higher+board+.15, width, 30], center = false);
+      //translate([0, 0, 0]); cube(size = [board+.15, width+.2, 20], center=false);
+    }
+  }
+
+  board_thickness = 19;
+  lower_thickness = 5;
+  higher_thickness = 3;
+  width = 25;
+
+//  rotate(a = angle, v = [1, 0, 0])
+//    base(size2d = [width, (board_thickness+lower_thickness+higher_thickness)/cos(45)+2*(14)], thickness=3.5);
+  socket(board = board_thickness, higher=higher_thickness, lower=lower_thickness, width=width);
+}
+
+//angled_connector(angle = 35, height = 44, width = 24, depth = 30, thickness = 3);
+pc_socket(angle = 45);
+
+//desk();
+//decoration();
