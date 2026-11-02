@@ -357,6 +357,14 @@ module saw_insert_adjustment() {
   translate(v = [20, 0, 0]) square_washer(.4);
 }
 
+module perpendicular_setup_helper(blade_width) {
+  linear_extrude(height = 200, center = false, convexity = 10, twist = 0, slices = 20, scale = 1.0) {
+    square(size = [2+blade_width+2, 5], center = false);
+    translate(v = [2, -2.5, 0]) square(size = [blade_width, 2.6], center = false);
+  }
+}
+
 //translate([0, 150, 0]) workpiece_stop();
 //vacuum_adapter(VACUUM_OD);
-translate(v = [0, 200, 0]); saw_insert_adjustment();
+//translate(v = [0, 200, 0]); saw_insert_adjustment();
+perpendicular_setup_helper(blade_width = 3);
