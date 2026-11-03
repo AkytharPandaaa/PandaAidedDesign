@@ -1,7 +1,9 @@
 // created by AkytharPandaaa
 
-use <202607BambooPC.scad>
 use <Parts/Screw.scad>
+
+use <202607BambooPC.scad>
+use <202512InductionPadOverheadMount.scad>
 
 $fn = $preview? 25 : 125;
 
@@ -91,14 +93,14 @@ module desk() {
 
   // plates
   color(c = "#00aacc", alpha = 1.0) {
-    translate(v = [24, 22, 24+140]) cube(size = [12, 500, 86], center = false);
-    translate(v = [24, 22+280, 24]) cube(size = [12, 800-22-24-280, 140], center = false);
-    translate(v = [36, 800-24-12, 24]) cube(size = [125, 12, 140], center = false);
-    translate(v = [36+125, 800-36, 24]) cube(size = [125, 12, 600], center = false);
+    translate(v = [24, 22, 24+140]) cube(size = [6.5, 500, 86], center = false);
+    translate(v = [24, 22+280, 24]) cube(size = [6.5, 800-22-24-280, 140], center = false);
+    translate(v = [36, 800-24-6.5, 24]) cube(size = [125, 6.5, 140], center = false);
+    translate(v = [36+125, 800-24-6.5, 24]) cube(size = [125, 6.5, 600], center = false);
 
     difference() {
-    translate(v = [36+250, 800-36, 24]) cube(size = [850, 12, 375], center = false); // [342, 12, 250]
-    translate(v = [650+22, 800-36-1, 24-1]) cube(size = [56, 14, 52], center = false); // [342, 12, 250]
+    translate(v = [36+250, 800-24-6.5, 24]) cube(size = [850, 6.5, 375], center = false); // [342, 6.5, 250]
+    translate(v = [650+22, 800-24-6.5-1, 24-1]) cube(size = [56, 6.5+2, 52], center = false); // [342, 6.5, 250]
     }
   }
 }
@@ -129,11 +131,11 @@ module angled_connector(angle, height, width, depth, thickness = 3, tolerance = 
 module pc_socket(angle) {
   module rounded_corner(radius, height, rotation=0) {
     translate(v = [radius/2, radius/2, -.1]) 
-    rotate(a = 90*(rotation%4), v = [0, 0, 1]) 
-      translate(v = [radius/2, radius/2, 0]) difference() {
-        rotate(a = 180, v = [0, 0, 1]) cube(size = [radius+.1, radius+.1, height+.2], center = false);
-        translate(v = [0, 0, -.1]) cylinder(h = height+.4, r = radius, center = false);
-      }    
+      rotate(a = 90*(rotation%4), v = [0, 0, 1]) 
+        translate(v = [radius/2, radius/2, 0]) difference() {
+          rotate(a = 180, v = [0, 0, 1]) cube(size = [radius+.1, radius+.1, height+.2], center = false);
+          translate(v = [0, 0, -.1]) cylinder(h = height+.4, r = radius, center = false);
+        }    
   }
   module base(size2d, thickness=4) {
     screw_edge_distance = 7;
@@ -170,9 +172,36 @@ module pc_socket(angle) {
 //    base(size2d = [width, (board_thickness+lower_thickness+higher_thickness)/cos(45)+2*(14)], thickness=3.5);
   socket(board = board_thickness, higher=higher_thickness, lower=lower_thickness, width=width);
 }
+module charging_pad() {
+  module rounded_corner(radius, height, rotation=0) {
+    translate(v = [radius/2, radius/2, -.1]) 
+      rotate(a = 90*(rotation%4), v = [0, 0, 1]) 
+        translate(v = [radius/2, radius/2, 0]) difference() {
+          rotate(a = 180, v = [0, 0, 1]) cube(size = [radius+.1, radius+.1, height+.2], center = false);
+          translate(v = [0, 0, -.1]) cylinder(h = height+.4, r = radius, center = false);
+        }    
+  }
+  translate(v = [650 + (100-95.95)/2, 680, 85]) rotate(a = 60, v = [1,0,0]) union() {
+    translate(v = [95.95/2, 15, 2.5]) rotate([0, -90, 90])  difference() {
+      induction_pad_mount(depth = 30, angle = 20, cutout_sample = false);
+      translate(v = [-50-2.5, -50, -30/2-1]) cube(size = [50, 100, 30+2], center = false);
+    }
+    translate(v = [-14 - (100-95.95)/2, 0, 0]) difference() {
+      cube(size = [14*2+100, 14, 2.5], center = false);
+
+      for (x=[0:1]) 
+        for (y=[0:1]) {
+          translate(v = [(14*2+100-7)*x, (14-7)*y, 0])
+            rounded_corner(radius=7, height=2.5, rotation= x==0&&y==1? 3:y+x);
+          translate(v = [7 + (14+100)*y, 7, 2.5]) screw(diameter = 3.5, length = 12, cutout_sample = true);
+        }
+    }
+  }
+}
 
 //angled_connector(angle = 35, height = 44, width = 24, depth = 30, thickness = 3);
-pc_socket(angle = 45);
+//pc_socket(angle = 45);
+charging_pad();
 
-//desk();
-//decoration();
+desk();
+decoration();
