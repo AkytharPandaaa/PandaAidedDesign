@@ -172,6 +172,7 @@ module pc_socket(angle) {
 //    base(size2d = [width, (board_thickness+lower_thickness+higher_thickness)/cos(45)+2*(14)], thickness=3.5);
   socket(board = board_thickness, higher=higher_thickness, lower=lower_thickness, width=width);
 }
+
 module charging_pad() {
   module rounded_corner(radius, height, rotation=0) {
     translate(v = [radius/2, radius/2, -.1]) 
@@ -198,6 +199,9 @@ module charging_pad() {
     }
   }
 }
+
+// TODO: add bracket for both speakers to face me 35 degrees and maybe 10 degrees upwards?
+// TODO: mount speakers directly under the main screen (left on the screen grid)
 
 //angled_connector(angle = 35, height = 44, width = 24, depth = 30, thickness = 3);
 //pc_socket(angle = 45);
