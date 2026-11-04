@@ -176,19 +176,20 @@ module pc_socket(angle) {
 module charging_pad() {
   module rounded_corner(radius, height, rotation=0) {
     translate(v = [radius/2, radius/2, -.1]) 
-      rotate(a = 90*(rotation%4), v = [0, 0, 1]) 
+      rotate(a = 90*(rotation%4), v = [0, 0, 1])
         translate(v = [radius/2, radius/2, 0]) difference() {
           rotate(a = 180, v = [0, 0, 1]) cube(size = [radius+.1, radius+.1, height+.2], center = false);
           translate(v = [0, 0, -.1]) cylinder(h = height+.4, r = radius, center = false);
         }    
   }
-  translate(v = [650 + (100-95.95)/2, 680, 85]) rotate(a = 60, v = [1,0,0]) union() {
+  translate(v = [650 + (100-95.95)/2, 680, 85]) rotate(a = 60, v = [1,0,0]); union() {
     translate(v = [95.95/2, 15, 2.5]) rotate([0, -90, 90])  difference() {
       induction_pad_mount(depth = 30, angle = 20, cutout_sample = false);
       translate(v = [-50-2.5, -50, -30/2-1]) cube(size = [50, 100, 30+2], center = false);
     }
     translate(v = [-14 - (100-95.95)/2, 0, 0]) difference() {
       cube(size = [14*2+100, 14, 2.5], center = false);
+      // TODO: move mounting to the top (left and right) 10mm
 
       for (x=[0:1]) 
         for (y=[0:1]) {
@@ -207,5 +208,5 @@ module charging_pad() {
 //pc_socket(angle = 45);
 charging_pad();
 
-desk();
-decoration();
+//desk();
+//decoration();
